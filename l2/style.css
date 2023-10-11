@@ -21,3 +21,12 @@ input[type=submit] {
     margin: 10px 2px;
     cursor: pointer;
 }
+button{
+    background-color: #aa4f04;
+    border: none;
+    color: white;
+    padding: 10px 22px;
+    text-decoration: none;
+    margin: 10px 2px;
+    cursor: pointer;   
+}
