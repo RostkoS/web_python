@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Lab 2</h1>
+
+    <form action="/cgi-bin/form_handler.py" method="post">
+        <label>Name:</label>
+        <br>
+         <input type="text" name="name">
+         <br>
+        <label>Surname: </label>
+        <br>
+         <input type="text" name="surname">
+        <br>
+        <br>
+        <label>What languege(s) do you know?</label>
+        <br>
+        <input type="checkbox" name="English" value="on"> English
+        <input type="checkbox" name="Ukrainian" value="on"> Ukrainian
+        <input type="checkbox" name="German" value="on"> German
+        <br>
+        <br>
+        <label>Do you agree to the terms? </label>
+        <br>
+        <input type="radio" name="terms" value="yes"> <label>Yes</label>
+        <input type="radio" name="terms" value="no"> <label>No</label>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
