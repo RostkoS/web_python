@@ -20,8 +20,8 @@ if name=="" and surname=="":
     name="uknown" 
     surname=="user"
 
-print(f"Set-cookie: name={name};")
-print(f"Set-cookie: surname={surname};")
+print(f"Set-cookie: name={name}")
+print(f"Set-cookie: surname={surname}")
 print(f"Set-cookie: terms={terms};")
 print(f"Set-cookie: English={languages_checkbox["English"]};")
 print(f"Set-cookie: Ukrainian={languages_checkbox["Ukrainian"]};")
@@ -49,7 +49,7 @@ if cookie.get('counter').value >= 0:
    counter = cookie['counter']
    print(f"Set-cookie: counter={counter};")
 counter+=1
-print("Content-type:text/html\r\n")
+print("Content-type:text/html\r\n\r\n")
 
 template_html = f"""
 <!DOCTYPE html>
@@ -59,10 +59,12 @@ template_html = f"""
     <title>Result</title>
 </head>
 <body>
-    <h1> Hi, {name} {surname}</h1>
-    <h1>  </h1>
-    <h2> {languages_checkbox=} </h2>
-    <h2> {terms=} </h2>
+<h1> Hi, {name} {surname}</h1>
+    <h1>Language options for you are:  </h1>
+    <h2>English - {languages_checkbox["English"]} </h2>
+     <h2>Ukrainian - {languages_checkbox["Ukrainian"]} </h2>
+    <h2>German - {languages_checkbox["German"]} </h2>
+    <h1>Did you agree to the terms? {terms} </h1>
     <br>
     <h2> From cookie: </h2>
     <h3> {name_cookie=} {surname_cookie=} {terms_cookie=} {english_cookie=} {ukrainian_cookie=} {german_cookie=}</h3>
