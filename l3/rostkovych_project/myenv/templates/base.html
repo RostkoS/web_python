@@ -37,6 +37,24 @@
 <script src="{{url_for('static', filename='js/script.js')}}"></script>
 </body>
 <footer>
-  <p>2023</p>
+  <p>
+    OS - 
+    {% if(data=="nt") %}
+    Windows
+    {% else %}
+    Unix
+    {% endif %}
+  </p>
+    <p>
+      User-agent data -
+    {{user_agent}}
+  </p>
+  <p>
+    Current time -
+    {{t}}
+    </p>
+
+
+
 </footer>
 </html>

@@ -21,3 +21,4 @@ document.getElementById('hi').style.opacity = 0;
             document.getElementById('hi').style.opacity=1;
     }
 }
+

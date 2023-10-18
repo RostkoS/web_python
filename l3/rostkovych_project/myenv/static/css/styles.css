@@ -1,15 +1,49 @@
 @import "bootstrap.min.css";
 body {
+    max-width: 100%;
+    overflow-x: hidden;
     background-repeat: no-repeat repeat;
     background-size: 100%;
     background-image: url('/static/images/images.png')
 }
+footer{
+    margin-top: 10%;
+    background-color:rgb(16, 43, 61);
+    color: rgb(143, 165, 185);
+    padding: 2%;
+}
 .info{
+    margin-left:4%;
     background-color:#80808000;
     width: 100%;
     color: rgb(255, 255, 255) !important;
+    font-size: 400%;
    }
-
+   .info h1, h2{
+    color: rgb(255, 255, 255) !important;
+    margin-right: 10%;
+    margin-bottom: 5%;
+   }
+.info p{
+    
+    font-size: 35%;
+    margin-right: 10%;
+    line-height: normal;
+}
+.lang{
+    margin-right: 10%;
+    text-align: right;
+    vertical-align:bottom;
+    background-color:#80808000;
+    width: 40%;
+    font-size: 180%;
+    color: rgb(255, 255, 255) !important;
+}
+.title{
+    vertical-align:top;
+    font-size: 170%;
+    text-align: center;
+}
 .card{
     background-color:#80808000;
     width: 100%;
@@ -17,10 +51,11 @@ body {
     
 }
 .text{
+    margin-left:3%;
     color: rgb(255, 255, 255) !important;
     grid-row: 1;
     grid-column: 1;
-    font-size: 2500%;
+    font-size: 1600%;
     opacity: 0;
     transition: opacity 0.5s ease-out;
   }
@@ -28,7 +63,7 @@ body {
     color: rgb(219, 196, 196)!important;
     grid-row: 1;
     grid-column: 1;
-    font-size: 2500%;
+    font-size: 1600%;
     opacity: 1;
     transition: opacity 0.5s ease-in;
   }
@@ -44,3 +79,113 @@ img{
     margin-bottom: 5%;
     width: 25%;
 }
+
+.half-arc {
+    position: relative;
+    width: 100px;
+    height: 50px;
+    border-top-left-radius: 100px;
+    border-top-right-radius: 100px;
+    border-bottom: 0;
+    background: #d9d9d9;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.half-arc:before {
+    content: "";
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200%;
+    border-radius: 50%;
+    background-image: conic-gradient(#9d46e4, #19075b calc(var(--percentage, 0) / 2), #bbb 0);
+    transition: transform .5s ease-in-out;
+    z-index: 1;
+    transform: rotate(270deg);
+}
+
+.half-arc:after {
+    content: "";
+    position: absolute;
+    display: block;
+    background: #dddddd00;
+    z-index: 2;
+    width: calc(100% - 32px);
+    height: calc(200% - 32px);
+    border-radius: 50%;
+    top: 16px;
+    left: 16px;
+}
+
+.half-arc span {
+    color: #673ab7;
+    z-index: 3;
+    text-align: center;
+}
+.label{
+    text-align: center;
+    margin-top: 20px;
+    width: 40px;
+  height: 30px;
+  font-size: 13px;
+  line-height: 30px;
+  border-radius: 40%;
+    background-color: antiquewhite;
+    color: rgb(6, 35, 60) !important;
+}
+#info-sect {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 40%;
+  }
+  
+#info-sect h1{
+    margin-right:10%;
+    margin-left:4%;
+    color: rgb(255, 255, 255) !important;
+    font-size: 190%;
+  }
+  .hard{
+    position:fixed; float:left;
+    margin-left: 5%;
+  }
+  .check-list{
+    position:fixed; float:right;
+    margin-left: 50%;
+  }
+  .check-list h1{
+    color: rgb(255, 255, 255) !important;
+    margin-right: 5%;
+    margin-bottom: 5%;
+    font-size: 400%;
+  }
+  .check-list li {
+    font-size: 200%;
+    position: relative;
+    list-style-type: none;
+    padding-left: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .check-list li:before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 20%;
+      width: 10%;
+      height: 20%;
+      border-width: 0 5px 5px 0;
+      border-style: solid;
+      border-color: #ffffff;
+      transform-origin: bottom left;
+      transform: rotate(45deg);
+  }

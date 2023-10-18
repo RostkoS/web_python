@@ -3,11 +3,22 @@
 {% block title %} Skills {% endblock %}
 
 {% block body %}
-<ul>
+<h1 class="info" style="margin-top: 2%;">Hard Skills</h1>
+
+<ul class="hard">
     
     {% for item in data %}
         <li class="info">{{item}}</li>
     {% endfor %}
     </ul>
+ 
+    <ul class="check-list">
+        <h1>Soft Skills</h1>
+      <li class="info">Creativity</li>
+      <li class="info">Adaptability</li>
+      <li class="info">Time Management</li>
+        </ul>
+        <br><br><br><br><br><br><br><br><br><br>
+
 
 {% endblock %}

@@ -2,12 +2,15 @@ from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 #create the object of Fla
 import os
-
+from datetime import datetime
+from flask import request
 app  = Flask(__name__)
 bootstrap = Bootstrap(app)
-print(os.name)
 
 
+@app.context_processor
+def inject_user():
+    return dict(data=os.name, user_agent=request.headers.get('User-Agent'),t=datetime.now().strftime("%H:%M:%S"))
 #creating our routes
 @app.route('/')
 def home():
@@ -25,7 +28,7 @@ def education():
 @app.route('/skills')
 @app.route('/skills/<int:id>')
 def skills(id=None):
-    mylist = ["java", "c++", "python"]
+    mylist = ["Java", "C++", "Python"]
     if id==None:
      return render_template('skills.html', data=mylist)
     else:
