@@ -35,15 +35,14 @@ def skills(id=None):
 
 @app.route('/info')
 def info():
-    if 'keys' not in session:
-        session['keys']=[]
-        session['values']=[]
+  if session.get('name', None)!=None:
     name = session['name']
     password = session['password']
     dict = request.cookies.to_dict()
     dict.pop("session")  
     return render_template("info.html", name=name, password=password, cookies=dict)
-
+  else:
+      return  redirect(url_for("login"))
 @app.route('/logout', methods=["POST"])
 def logout():
     session.pop('name', default=None)
@@ -74,22 +73,29 @@ def login():
 
 @app.route('/setcookie', methods=["GET"])
 def setcookie():
+ if session.get('name', None)!=None:
     name = session['name']
     password = session['password']
     dict = request.cookies.to_dict()
-    key = request.args.get("set_key") #101
-    value = request.args.get("set_value")
+    key = request.args.get("set_key") 
     resp = make_response()
-    resp.set_cookie(key, value)  
-    c = request.cookies.get(key)
-    print(c)
-    dict.update({key:c})
     dict.pop("session")  
-    resp.set_data(render_template("info.html", name=name, password=password, cookies=dict, resp = f"Set cookie {key}"))
+    r=f"Set cookie {key}"
+    if key!="" and request.args.get("set_value")!="":
+      value = request.args.get("set_value")
+      resp.set_cookie(key, value)  
+      c = request.cookies.get(key)
+      dict.update({key:c})
+    else:
+        r="Enter full data"
+    resp.set_data(render_template("info.html", name=name, password=password, cookies=dict, resp = r))
     return resp
+ else:
+      return  redirect(url_for("login"))
 
 @app.route('/clearcookie', methods=["GET"])
 def clearcookie():
+   if session.get('name', None)!=None:
     name = session['name']
     password = session['password']
     dict = request.cookies.to_dict()
@@ -104,10 +110,13 @@ def clearcookie():
     dict.pop("session")  
     resp.set_data(render_template("info.html", name=name, password=password, cookies=dict, resp = r)) 
     return resp
+   else:
+      return  redirect(url_for("login"))
 
 
 @app.route('/clearall', methods=["GET"])
 def clearall():
+ if session.get('name', None)!=None:
     dict = {}
     name = session['name']
     password = session['password']
@@ -118,4 +127,5 @@ def clearall():
     resp.set_data(render_template("info.html", name=name, password=password, cookies=dict, resp = f"Delete all cookie")) 
    
     return resp
-    
+ else:
+      return  redirect(url_for("login"))

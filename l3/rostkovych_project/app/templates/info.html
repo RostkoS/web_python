@@ -5,24 +5,23 @@
     <div class="container">
       </div>
         {% block content %}
-        <h1>Info page. Hi, {{name}} {{suburl}} {{password}}</h1>
-        <form action={{url_for("logout")}} method="POST">
-        <button >Exit</button>
-        </form>
-     
+        <h1 class="info">Info page. Hi, {{name}} </h1>
+      
             <br>
             <form action={{url_for("setcookie")}} method="GET">
                 <label>Enter key</label>
                 <input  name="set_key">
                 <label>Enter value</label>
                 <input  name="set_value">
-                <button >Create cookie</button>
+                <br>
+                <br>
+                <button class="btn btn-primary">Create cookie</button>
             </form>
 
+
             <br>
-            {{resp}}
-            <br>
-                <table>Cookies
+            <h1 class="info">Cookies</h1>
+                <table class="cookies">
                     <tr>
                         <th>
                             Key
@@ -37,23 +36,36 @@
                     </tr>
                     {% endfor %}
                 </table>
-                <br>
+         
+            <p  class="resp"> {{resp}} </p>
                 <form action={{url_for("clearcookie")}} method="GET">
+                    <label>Enter key for deletion</label>
                     <input  name="del_key">
-                    <button >Delete cookie</button>
+                    <br>
+
+                    <button class="btn btn-primary">Delete cookie</button>
+                    </form>
+                    
+                    <form action={{url_for("clearall")}} method="GET">
+                    <button class="btn btn-primary">Delete all cookies</button>
                     </form>
                     <br>
-                    <form action={{url_for("clearall")}} method="GET">
-                        <button >Delete all cookies</button>
-                        </form>
-
-                        <form action={{url_for("change_pasw")}} method="POST">
-                            <label>Enter current password</label>
-                            <input  name="current_password">
+                    <br>
+                    <form action={{url_for("change_pasw")}} method="POST">
+                    <label>Enter current password</label>
+                     <input type="password"  name="current_password">
                             <label>Enter new password</label>
-                            <input  name="new_password">
-                            <button >Change password</button>
+                            <input type="password"   name="new_password">
+                            <br>
+                            <button class="btn btn-primary">Change password</button>
                             </form>
+                            <br>
+                            <form action={{url_for("logout")}} method="POST">
+                                <button class="btn btn-primary">Exit</button>
+       
+                            </form>
+                         
+                         
         {% endblock %}
     </div>
 

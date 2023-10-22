@@ -6,11 +6,31 @@ body {
     background-size: 100%;
     background-image: url('/static/images/images.png')
 }
+input{
+  width: 30%;
+  max-width: 200px;
+}
+label{
+  background-color:#80808000;
+  width: 100%;
+  color: rgb(255, 255, 255) !important;
+  font-size: 100%;
+}
+form{
+  width:100%;
+  text-align: center;
+}
 footer{
     margin-top: 10%;
     background-color:rgb(16, 43, 61);
     color: rgb(143, 165, 185);
     padding: 2%;
+}
+.resp{
+  color: rgb(255, 255, 255) !important;
+  font-size: 200%;
+  position: absolute;
+  top: 65%; left:70%;
 }
 .info{
     margin-left:4%;
@@ -29,6 +49,12 @@ footer{
     font-size: 35%;
     margin-right: 10%;
     line-height: normal;
+}
+.cookies{
+  width: 50%;
+  color: rgb(255, 255, 255) !important;
+  font-size: 150%;
+  margin-left: 10%;
 }
 .lang{
     margin-right: 10%;
