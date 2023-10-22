@@ -49,6 +49,17 @@ def logout():
     session.pop('name', default=None)
     return redirect(url_for("login"))
 
+@app.route('/change_pasw', methods=["POST"])
+def change_pasw():
+   if request.method == "POST":
+        p1 = request.form.get("current_password")
+        if(session['password']==p1):
+            session['password']= request.form.get("new_password")
+            with open(path_to_json, "w") as jsonFile:
+              data['password']=request.form.get("new_password")
+              json.dump(data, jsonFile)
+   return redirect(url_for("info"))
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
     print( data["user"])
