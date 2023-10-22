@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+{% extends 'base.html' %}
+{% block title %} Info {% endblock %}
+{% block body %}
 <body>
     <div class="container">
       </div>
@@ -12,10 +9,46 @@
         <form action={{url_for("logout")}} method="POST">
         <button >Exit</button>
         </form>
-       
+     
+            <br>
+            <form action={{url_for("setcookie")}} method="GET">
+                <label>Enter key</label>
+                <input  name="set_key">
+                <label>Enter value</label>
+                <input  name="set_value">
+                <button >Create cookie</button>
+            </form>
+
+            <br>
+            {{resp}}
+            <br>
+                <table>Cookies
+                    <tr>
+                        <th>
+                            Key
+                        </th>
+                        <th>
+                            Value
+                        </th>
+                    </tr>
+                    {% for key, value in cookies.items() %}
+                     <td>{{key}}</td>
+                        <td>{{value}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <br>
+                <form action={{url_for("clearcookie")}} method="GET">
+                    <input  name="del_key">
+                    <button >Delete cookie</button>
+                    </form>
+                    <br>
+                    <form action={{url_for("clearall")}} method="GET">
+                        <button >Delete all cookies</button>
+                        </form>
         {% endblock %}
     </div>
 
 
 </body>
-</html>
+{% endblock %}
