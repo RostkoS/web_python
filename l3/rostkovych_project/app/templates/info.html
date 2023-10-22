@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="container">
+      </div>
+        {% block content %}
+        <h1>Info page. Hi, {{name}} {{suburl}} {{password}}</h1>
+        <form action={{url_for("logout")}} method="POST">
+        <button >Exit</button>
+        </form>
+       
+        {% endblock %}
+    </div>
+
+
+</body>
+</html>
