@@ -36,9 +36,9 @@ def skills(id=None):
 
 @app.route('/info')
 def info():
-  if session.get('name', None)!=None:
-    name = session['name']
-    password = session['password']
+  name = request.args['name']
+  password = request.args['password']
+  if name!=None:
     dict = request.cookies.to_dict()
     dict.pop("session")  
     return render_template("info.html", name=name, password=password, cookies=dict)
@@ -67,12 +67,13 @@ def login():
         form.remember( class_ = "checkbox")
         name = form.name.data
         password = form.password.data
-        remember = form.remember
-        session['name']=name
-        session['password']=password
+        remember = form.remember.data
+        if(remember==True):
+         session['name']=name
+         session['password']=password
         if name == data["user"] and password == data["password"]:
             flash("Вхід виконано", category="success")
-            return redirect(url_for("info"))
+            return redirect(url_for("info", name=name, password=password))
         else:
               flash("Вхід не виконано", category="danger")
     return render_template("login.html", form=form)

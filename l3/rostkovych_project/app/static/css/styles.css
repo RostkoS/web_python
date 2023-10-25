@@ -31,12 +31,10 @@ footer{
     color: rgb(143, 165, 185);
     padding: 2%;
 }
-.checkbox {
-  height: 25px;
-  width: 25px;
-}
+
 .remember{
   width: 15%;
+  text-align: center;
 }
 .resp{
   color: rgb(255, 255, 255) !important;

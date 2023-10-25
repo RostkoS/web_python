@@ -6,17 +6,17 @@
 {% endblock %}
 
 {% block body %}
+<br>
 <div class="container">
 <form class="login" action={{url_for("login")}} method="POST" novalidate>
-  {{form.hidden_tag()}}
+  {{ form.csrf_token }}
   {{ render_field(form.name, class="form-control") }}
   {{ render_field(form.password, class="form-control") }}
   <div class="remember">
-    {{form.remember.label}}
- {{form.remember}}
+    {{ render_field(form.remember) }}
 </div>
   {{form.submit()}}
 </form>
-<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
+<br> 
 </div>
 {% endblock %}

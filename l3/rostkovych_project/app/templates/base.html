@@ -9,6 +9,11 @@
   </head>
  <body>
  {% include "nav.html" %}
+ {% for var, msg in get_flashed_messages(True) %}
+<ul class="list-group">
+  <li class="list-group-item list-group-item-{{var}}"> {{msg}}</li>
+</ul>
+ {% endfor %}
   {% block body %}
 
 {% endblock %}
