@@ -1,23 +1,21 @@
 {% extends "base.html" %}
 {% block title %} Форма {% endblock %}
-
+{% from "_render_field.html" import render_field %}
 {% block css %}
 {{ super() }}
 {% endblock %}
 
 {% block body %}
 <div class="container">
-<form action={{url_for("login")}} method="POST">
-  <br>
-    <label for="name">Username</label>
-    <input type="text" name="name">
-    <br>
-    <br>
-    <label for="pasw">Password</label>
-    <input type="password" name="password">
- <br>
- <br>
-  <button type="submit" class="btn btn-primary">Submit</button>
+<form class="login" action={{url_for("login")}} method="POST" novalidate>
+  {{form.hidden_tag()}}
+  {{ render_field(form.name, class="form-control") }}
+  {{ render_field(form.password, class="form-control") }}
+  <div class="remember">
+    {{form.remember.label}}
+ {{form.remember}}
+</div>
+  {{form.submit()}}
 </form>
 <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br>
 </div>

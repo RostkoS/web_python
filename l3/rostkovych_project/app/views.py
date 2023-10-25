@@ -1,7 +1,8 @@
 from collections import defaultdict
-from flask import request, render_template,redirect ,url_for, make_response, session;
+from flask import flash, request, render_template,redirect ,url_for, make_response, session;
 from app import app
 import os
+from .forms import LoginForm
 from datetime import datetime
 from flask import request
 import json
@@ -61,15 +62,20 @@ def change_pasw():
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    print( data["user"])
-    if request.method == "POST":
-        name = request.form.get("name")
+    form = LoginForm()
+    if form.validate_on_submit():
+        form.remember( class_ = "checkbox")
+        name = form.name.data
+        password = form.password.data
+        remember = form.remember
         session['name']=name
-        password = request.form.get("password")
         session['password']=password
         if name == data["user"] and password == data["password"]:
+            flash("Вхід виконано", category="success")
             return redirect(url_for("info"))
-    return render_template("login.html")
+        else:
+              flash("Вхід не виконано", category="danger")
+    return render_template("login.html", form=form)
 
 @app.route('/setcookie', methods=["GET"])
 def setcookie():
