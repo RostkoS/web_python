@@ -10,11 +10,9 @@
 <div class="container">
 <form class="login" action={{url_for("login")}} method="POST" novalidate>
   {{ form.csrf_token }}
-  {{ render_field(form.name, class="form-control") }}
-  {{ render_field(form.password, class="form-control") }}
-  <div class="remember">
-    {{ render_field(form.remember) }}
-</div>
+  {{ render_field(form.name, class="form-control" )}}
+  {{ render_field(form.password, class="form-control" )}}
+  {{ render_field(form.remember )}}
   {{form.submit()}}
 </form>
 <br> 

@@ -12,4 +12,27 @@ class LoginForm(FlaskForm):
                              ])
     remember = BooleanField("Remember")
     submit = SubmitField("Sign In")
-
+class ChangePassword(FlaskForm):
+    password = PasswordField("Current Password",
+                             validators=[
+                                 DataRequired("Це поле обов'язкове"),
+                                 Length(min=4, max=10)
+                             ])
+    new_password = PasswordField("New Password",
+                             validators=[
+                                 DataRequired("Це поле обов'язкове"),
+                                 Length(min=4, max=10)
+                             ])
+    submit = SubmitField("Change Password")
+class Exit(FlaskForm):
+  submit = SubmitField("Exit")
+class SetCookies(FlaskForm):
+    key = StringField("Key",
+                           validators=[DataRequired(message="Це поле обов'язкове")])
+    value = StringField("Value",
+                           validators=[DataRequired(message="Це поле обов'язкове")])
+    submit = SubmitField("Create cookie")
+class Todo(FlaskForm):
+    text = StringField("Text",
+                           validators=[DataRequired(message="Це поле обов'язкове")])
+    submit = SubmitField("Save")

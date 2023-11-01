@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %} Todo {% endblock %}
+{% from "_render_field.html" import render_field %}
+{% block body %}
+<body>
+    <div class="container">
+    <form  action={{url_for("todo")}} method="POST" novalidate>
+    {{ form.csrf_token }}
+    {{ render_field(form.text, class="form-control" )}}
+    {{form.submit()}}
+</form>
+<form action={{url_for("todo")}} method="POST">
+    <table>
+        <thead>
+            <th>№</th>
+            <th>Item</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            {% for i in list %}
+            <tr>
+                <th>{{i.id}}</th>
+                <td>{{i.title}}</td>
+                <td>
+                    {% if i.complete == False %}
+                    <div>In progress</div>
+                    {% else %}
+                    <div>Compelted</div>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/todo/update/{{i.id}}">Update</a>
+                    <a href="/todo/delete/{{i.id}}">Delete</a>
+                    
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+</div>
+</body>
+{% endblock %}

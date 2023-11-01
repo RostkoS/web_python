@@ -1,7 +1,7 @@
-{% macro render_field(field) %}
+{% macro render_field(field, placeholder) %}
 <br>
   <dt>{{ field.label }}</dt>
-  <dd>{{ field(**kwargs) | safe }}</dd>
+  <dd>{{ field(placeholder=placeholder, **kwargs) | safe }}</dd>
 
   {% if field.errors %}
     <ul class=errors>

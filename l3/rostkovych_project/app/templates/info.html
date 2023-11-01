@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block title %} Info {% endblock %}
+{% from "_render_field.html" import render_field %}
 {% block body %}
+
 <body>
     <div class="container">
       </div>
@@ -51,18 +53,18 @@
                     </form>
                     <br>
                     <br>
-                    <form action={{url_for("change_pasw")}} method="POST">
-                    <label>Enter current password</label>
-                     <input type="password"  name="current_password">
-                            <label>Enter new password</label>
-                            <input type="password"   name="new_password">
+                    <div class="container">
+                    <form class="login" action={{url_for("change_pasw")}} method="POST" novalidate>
+                            {{ change.csrf_token }}
+                            {{ render_field(change.password, class="form-control", placeholder="Current Password" )}}
+                            {{ render_field(change.new_password, class="form-control", placeholder="New Password") }}
+                            {{ change.submit(class="btn btn-primary") }}
+                        </form>
+                    </div>
                             <br>
-                            <button class="btn btn-primary">Change password</button>
-                            </form>
-                            <br>
-                            <form action={{url_for("logout")}}  method="POST">
-                                <button class="btn btn-primary" >Exit</button>
-       
+                            <form action={{url_for("logout")}}  method="POST"  novalidate>
+                                {{ exit.csrf_token }}
+                                {{ exit.submit(class="btn btn-primary") }}
                             </form>
                          
                          
