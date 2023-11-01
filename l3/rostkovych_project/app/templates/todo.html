@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% block title %} Todo {% endblock %}
 {% from "_render_field.html" import render_field %}
+
 {% block body %}
 <body>
     <div class="container">
     <form  action={{url_for("todo")}} method="POST" novalidate>
     {{ form.csrf_token }}
-    {{ render_field(form.text, class="form-control" )}}
+    {{ render_field(form.text )}}
     {{form.submit()}}
 </form>
-<form action={{url_for("todo")}} method="POST">
-    <table>
+<form>
+    <table class="lang">
         <thead>
             <th>№</th>
             <th>Item</th>
@@ -26,7 +27,7 @@
                     {% if i.complete == False %}
                     <div>In progress</div>
                     {% else %}
-                    <div>Compelted</div>
+                    <div>Completed</div>
                     {% endif %}
                 </td>
                 <td>

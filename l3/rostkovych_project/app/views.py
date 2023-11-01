@@ -157,14 +157,14 @@ def todo():
    return render_template("todo.html",form = todo, list=todo_list)
 @app.route('/todo/update/<int:todo_id>', methods=["GET"])
 def update(todo_id):
-   chosen = db.session.query(User).filter(User.id==todo_id).first()
+   chosen = db.get_or_404(User, todo_id)
    chosen.complete = not chosen.complete
    db.session.commit()
    return redirect(url_for("todo"))
 
 @app.route('/todo/delete/<int:todo_id>', methods=["GET"])
 def delete(todo_id):
-   chosen = db.session.query(User).filter(User.id==todo_id).first()
+   chosen = db.get_or_404(User, todo_id)
    db.session.delete(chosen)
    db.session.commit()
    return redirect(url_for("todo"))
