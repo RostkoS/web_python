@@ -150,7 +150,8 @@ def todo():
    
    if todo.validate_on_submit():
     text = todo.text.data
-    new = User(title=text,complete=False)
+    description = todo.description.data
+    new = User(title=text,description=description,complete=False)
     db.session.add(new)
     db.session.commit()
    todo_list =db.session.query(User).all()

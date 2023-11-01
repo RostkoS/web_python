@@ -35,4 +35,5 @@ class SetCookies(FlaskForm):
 class Todo(FlaskForm):
     text = StringField("Title",
                            validators=[DataRequired(message="Це поле обов'язкове")])
+    description = StringField("Description")
     submit = SubmitField("Save")

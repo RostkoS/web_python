@@ -8,6 +8,7 @@
     <form  action={{url_for("todo")}} method="POST" novalidate>
     {{ form.csrf_token }}
     {{ render_field(form.text )}}
+    {{ render_field(form.description )}}
     {{form.submit()}}
 </form>
 <form>
@@ -15,6 +16,7 @@
         <thead>
             <th>№</th>
             <th>Item</th>
+            <th>Description</th>
             <th>Status</th>
             <th>Actions</th>
         </thead>
@@ -23,6 +25,7 @@
             <tr>
                 <th>{{i.id}}</th>
                 <td>{{i.title}}</td>
+                <td>{{i.description}}</td>
                 <td>
                     {% if i.complete == False %}
                     <div>In progress</div>
