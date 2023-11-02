@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField,StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Length
+from wtforms import TextAreaField, IntegerField,BooleanField,StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, Length, NumberRange
 
 class LoginForm(FlaskForm):
     name = StringField("Username",
@@ -35,5 +35,15 @@ class SetCookies(FlaskForm):
 class Todo(FlaskForm):
     text = StringField("Title",
                            validators=[DataRequired(message="Це поле обов'язкове")])
-    description = StringField("Description")
+    description = TextAreaField("Description")
     submit = SubmitField("Save")
+
+class ReviewForm(FlaskForm):
+    name = StringField("Username",
+                           validators=[DataRequired(message="Це поле обов'язкове"),
+                           Length(min=2, max=35)])
+    review = TextAreaField("Review",
+                           validators=[DataRequired(message="Це поле обов'язкове"),
+                           Length(min=5, max=600)])
+    rating = IntegerField("Rating", validators=[NumberRange(min=0,max=5)])
+    submit = SubmitField("Leave review")

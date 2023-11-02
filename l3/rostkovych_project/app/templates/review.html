@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %} Review {% endblock %}
+{% from "_render_field.html" import render_field %}
+
+{% block body %}
+<body>
+    <form class = "review_form"  action={{url_for("review")}} method="POST" novalidate>
+    {{ form.csrf_token }}
+    {{ render_field(form.name )}}
+    {{ render_field(form.review, class = "review" )}}
+    {{ render_field(form.rating, class="rating" )}}
+    {{form.submit()}}
+</form>
+    <table class="todo">
+        <thead>
+            <th>Name</th>
+            <th>Review</th>
+            <th>Rating</th>
+        </thead>
+        <tbody>
+            {% for i in list %}
+            <tr>
+                <td>{{i.name}}</td>
+                <td style="width: 50%;">{{i.review}}</td>
+                {% if i.rating|int < 3 %}
+                <td class="text-danger">
+                   
+                    {{i.rating}}
+                </td>
+                {% else %}
+                <td class="text-success">
+                   
+                    {{i.rating}}
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+{% endblock %}

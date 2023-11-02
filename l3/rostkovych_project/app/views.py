@@ -2,11 +2,11 @@ from collections import defaultdict
 from flask import flash, request, render_template,redirect ,url_for, make_response, session;
 from app import app
 import os
-from .forms import LoginForm, ChangePassword, Exit, Todo
+from .forms import ReviewForm,LoginForm, ChangePassword, Exit, Todo
 from datetime import datetime
 from flask import request
 import json
-from app import db, User
+from app import db, User, Review
 path_to_json = "app\static\data.json"
 with open(path_to_json, "r") as handler:
     data = json.load(handler)
@@ -143,6 +143,22 @@ def clearall():
     return resp
  else:
       return  redirect(url_for("login"))
+
+@app.route('/review', methods=["POST","GET"])
+def review():
+   review_form = ReviewForm()
+   
+   if review_form.validate_on_submit():
+    name = review_form.name.data
+    review = review_form.review.data
+    rating = review_form.rating.data
+    new = Review(name=name,rating=rating,review=review)
+    db.session.add(new)
+    db.session.commit()
+    flash("Відгук надіслано", category="success")
+   review_list =db.session.query(Review).all()
+   return render_template("review.html",form = review_form, list=review_list)
+
 
 @app.route('/todo', methods=["POST","GET"])
 def todo():

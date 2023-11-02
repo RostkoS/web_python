@@ -12,7 +12,7 @@
     {{form.submit()}}
 </form>
 <form>
-    <table class="lang">
+    <table class="todo">
         <thead>
             <th>№</th>
             <th>Item</th>
@@ -34,8 +34,8 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="/todo/update/{{i.id}}">Update</a>
-                    <a href="/todo/delete/{{i.id}}">Delete</a>
+                    <a class="btn btn-success" href="/todo/update/{{i.id}}">Update</a>
+                    <a class="btn btn-danger" href="/todo/delete/{{i.id}}">Delete</a>
                     
                 </td>
             </tr>

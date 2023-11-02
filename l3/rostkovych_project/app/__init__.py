@@ -16,8 +16,12 @@ class User(db.Model):
     title = db.Column(db.String(100))
     description = db.Column(db.String(600))
     complete = db.Column(db.Boolean)
-with app.app_context():
-    db.create_all()
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    review = db.Column(db.String(600))
+    rating = db.Column(db.Integer)
+
 csrf.init_app(app)
 
 from app import views
