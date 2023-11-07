@@ -17,9 +17,12 @@ class User(db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120),  unique=True, nullable=False)
     image_file =  db.Column(db.String(120),  nullable=False, default="default.jpg")
-    password_hash = db.Column(db.String(60), nullable=False)
+    password = db.Column(db.String(60), nullable=False)
    
-    def __repr__(self):
-      return f"User('{self.username}','{self.email}')"
+    def __init__(self,username, email,password):
+        self.username=username
+        self.email=email
+        self.password = bcrypt.generate_password_hash(password)
 
-  
+    def verify_password(self, pswrd):
+        return bcrypt.check_password_hash(self.password,pswrd)

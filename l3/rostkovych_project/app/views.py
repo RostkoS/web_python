@@ -80,9 +80,8 @@ def login():
          session['password']=password
         else:
           return redirect(url_for("home"))
-        exists = db.session.query(User.id).filter_by(username=name, password=password).first() is not None
         
-        if exists:
+        if db.session.query(User.password).filter_by(username=name).first()!=None and User.verify_password(db.session.query(User.password).filter_by(username=name).first(),password):
             flash("Вхід виконано", category="success")
             return redirect(url_for("info", name=name))
         flash("Вхід не виконано", category="danger")
@@ -102,6 +101,10 @@ def register():
         flash(f'Account created for {name} !',category='success')
         return redirect(url_for("info", name=reg.name.data))
     return render_template("login.html", reg=reg,form=form)
+@app.route('/allusers',methods=["GET"])
+def all_users():
+    list = User.query.all()
+    return render_template("allusers.html",list=list)
 @app.route('/setcookie', methods=["GET"])
 def setcookie():
  if session.get('name', None)!=None:
