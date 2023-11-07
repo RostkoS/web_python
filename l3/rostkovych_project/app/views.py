@@ -2,11 +2,12 @@ from collections import defaultdict
 from flask import flash, request, render_template,redirect ,url_for, make_response, session;
 from app import app
 import os
-from .forms import ReviewForm,LoginForm, ChangePassword, Exit, Todo
+from .forms import RegistrationForm, ReviewForm,LoginForm, ChangePassword, Exit, Todo
 from datetime import datetime
 from flask import request
 import json
-from app import db, User, Review
+from app import db
+from .models import Tasks, Review
 path_to_json = "app\static\data.json"
 with open(path_to_json, "r") as handler:
     data = json.load(handler)
@@ -70,6 +71,7 @@ def login():
     if session.get('name',None)!=None:
         return redirect(url_for("info", name=session['name'],password=session['password']))
     form = LoginForm()
+    reg = RegistrationForm()
     if form.validate_on_submit():
         name = form.name.data
         password = form.password.data
@@ -83,8 +85,15 @@ def login():
             flash("Вхід виконано", category="success")
             return redirect(url_for("info", name=name))
         flash("Вхід не виконано", category="danger")
-    return render_template("login.html", form=form)
-
+    return render_template("login.html", form=form,reg=reg)
+@app.route('/register', methods=["GET", "POST"])
+def register():
+    reg = RegistrationForm()
+    form = LoginForm()
+    if reg.validate_on_submit():
+        flash('Account created for {reg.name.data}!',category='success')
+        return redirect(url_for("info", name=reg.name.data))
+    return render_template("login.html", reg=reg,form=form)
 @app.route('/setcookie', methods=["GET"])
 def setcookie():
  if session.get('name', None)!=None:
@@ -167,14 +176,14 @@ def todo():
    if todo.validate_on_submit():
     text = todo.text.data
     description = todo.description.data
-    new = User(title=text,description=description,complete=False)
+    new = Tasks(title=text,description=description,complete=False)
     db.session.add(new)
     db.session.commit()
-   todo_list =db.session.query(User).all()
+   todo_list =db.session.query(Tasks).all()
    return render_template("todo.html",form = todo, list=todo_list)
 @app.route('/todo/update/<int:todo_id>', methods=["GET"])
 def update(todo_id):
-   chosen = db.get_or_404(User, todo_id)
+   chosen = db.get_or_404(Tasks, todo_id)
    chosen.complete = not chosen.complete
    db.session.commit()
    return redirect(url_for("todo"))

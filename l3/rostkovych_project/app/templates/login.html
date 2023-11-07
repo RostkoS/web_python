@@ -8,8 +8,18 @@
 {% block body %}
 <br>
 <div class="container">
+  <form class="register" action={{url_for("register")}} method="POST" novalidate>
+    {{ reg.csrf_token }}
+    <label>Register</label>
+    {{ render_field(reg.name, class="form-control" )}}
+    {{ render_field(reg.email, class="form-control" )}}
+    {{ render_field(reg.password, class="form-control" )}}
+    {{ render_field(reg.confirm_password, class="form-control" )}}
+    {{reg.submit()}}
+  </form>
 <form class="login" action={{url_for("login")}} method="POST" novalidate>
   {{ form.csrf_token }}
+  <label>Log In</label>
   {{ render_field(form.name, class="form-control" )}}
   {{ render_field(form.password, class="form-control" )}}
   {{ render_field(form.remember )}}
