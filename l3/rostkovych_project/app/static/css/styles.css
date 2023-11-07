@@ -25,6 +25,10 @@ form{
   text-align:left;
 
 }
+.btn{
+  min-width: 200px;
+}
+
 footer{
     margin-top: 10%;
     background-color:rgb(16, 43, 61);

@@ -7,7 +7,7 @@ from datetime import datetime
 from flask import request
 import json
 from app import db
-from .models import Tasks, Review
+from .models import Tasks, Review, User
 path_to_json = "app\static\data.json"
 with open(path_to_json, "r") as handler:
     data = json.load(handler)
@@ -68,30 +68,38 @@ def change_pasw():
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    if session.get('name',None)!=None:
-        return redirect(url_for("info", name=session['name'],password=session['password']))
     form = LoginForm()
     reg = RegistrationForm()
     if form.validate_on_submit():
         name = form.name.data
         password = form.password.data
         remember = form.remember.data
+
         if(remember):
          session['name']=name
          session['password']=password
         else:
           return redirect(url_for("home"))
-        if name == data["user"] and password == data["password"]:
+        exists = db.session.query(User.id).filter_by(username=name, password=password).first() is not None
+        
+        if exists:
             flash("Вхід виконано", category="success")
             return redirect(url_for("info", name=name))
         flash("Вхід не виконано", category="danger")
     return render_template("login.html", form=form,reg=reg)
+
 @app.route('/register', methods=["GET", "POST"])
 def register():
     reg = RegistrationForm()
     form = LoginForm()
     if reg.validate_on_submit():
-        flash('Account created for {reg.name.data}!',category='success')
+        name = reg.name.data
+        email = reg.email.data
+        password = reg.password.data
+        new = User(username=name,email=email,password=password)
+        db.session.add(new)
+        db.session.commit()
+        flash(f'Account created for {name} !',category='success')
         return redirect(url_for("info", name=reg.name.data))
     return render_template("login.html", reg=reg,form=form)
 @app.route('/setcookie', methods=["GET"])

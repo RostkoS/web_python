@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import EmailField, TextAreaField, IntegerField,BooleanField,StringField, PasswordField, SubmitField
-from wtforms.validators import EqualTo, DataRequired, Length, NumberRange
-
+from wtforms import EmailField,TextAreaField, IntegerField,BooleanField,StringField, PasswordField, SubmitField
+from wtforms.validators import Email,EqualTo, DataRequired, Length, NumberRange
 class LoginForm(FlaskForm):
     name = StringField("Username",
                            validators=[DataRequired(message="Це поле обов'язкове")])
@@ -17,7 +16,7 @@ class RegistrationForm(FlaskForm):
     name = StringField("Username",
                            validators=[Length(min=4, max=14),
                             DataRequired(message="Це поле обов'язкове")])
-    email = EmailField("Email", validators=[DataRequired(message="Це поле обов'язкове")])
+    email = EmailField("Email", validators=[Email(),DataRequired(message="Це поле обов'язкове")])
     password = PasswordField("Password",
                              validators=[
                                  DataRequired("Це поле обов'язкове"),
@@ -27,10 +26,10 @@ class RegistrationForm(FlaskForm):
                              validators=[
                                  DataRequired("Це поле обов'язкове"),
                                  Length(min=6),
-                                 EqualTo(password)
+                                 EqualTo('password')
                              ])
     
-    submit = SubmitField("Sign In")
+    submit = SubmitField("Sign Up")
 class ChangePassword(FlaskForm):
     password = PasswordField("Current Password",
                              validators=[
