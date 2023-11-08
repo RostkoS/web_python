@@ -68,11 +68,16 @@ def change_pasw():
    form = ChangePassword()
    if form.validate_on_submit():
         p1 = form.password.data
-        if(data['password']==p1):
+        
+        if(User.verify_password(db.session.query(User.password).filter_by(username=session['name']).first(),p1)):
             session['password']= form.new_password.data
+            User.password = form.new_password.data
+            flash("The password is changed", category="success")
             with open(path_to_json, "w") as jsonFile:
               data['password']=form.new_password.data
               json.dump(data, jsonFile)
+        else:
+             flash("The password is not changed", category="danger") 
    return redirect(url_for("info",name=session['name'], change=form))
 
 @app.route('/login', methods=["GET", "POST"])
