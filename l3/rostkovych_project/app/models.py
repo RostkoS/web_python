@@ -1,6 +1,7 @@
-from app import db 
-
+from app import db, login_manager 
+from flask_login import UserMixin
 from app import bcrypt
+
 class Tasks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
@@ -12,6 +13,9 @@ class Review(db.Model):
     review = db.Column(db.String(600))
     rating = db.Column(db.Integer)
 
+@login_manager.user_loader
+def user_loader(id):
+    return User.query.get(int(id))
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -26,3 +30,15 @@ class User(db.Model):
 
     def verify_password(self, pswrd):
         return bcrypt.check_password_hash(self.password,pswrd)
+
+    def is_authenticated(self, username, password)  :
+        if self.username==username and password == self.password:
+            return True  
+        return False
+
+    def is_active(self):
+        return True
+    def is_anonymous(self):
+        return False
+    def get_id(self):
+        return self.id

@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block body %}
+
 <br>
 <div class="container">
   <div  style="float:left;">
@@ -21,8 +22,9 @@
 </div>
   <div  style="float:right; margin-right: 10%;">
 <form class="login" action={{url_for("login")}} method="POST" novalidate>
-  {{ form.csrf_token }}
   <legend class="info">Log In</legend>
+  {{ form.csrf_token }}
+
   {{ render_field(form.name, class="form-control" )}}
   {{ render_field(form.password, class="form-control" )}}
   {{ render_field(form.remember, class="form-check-input" )}}

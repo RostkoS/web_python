@@ -7,6 +7,7 @@ from datetime import datetime
 from flask import request
 import json
 from app import db
+from flask_login import login_required, login_user, current_user, logout_user
 from .models import Tasks, Review, User
 path_to_json = "app\static\data.json"
 with open(path_to_json, "r") as handler:
@@ -48,9 +49,17 @@ def info():
     return render_template("info.html", name=name, cookies=dict, change=change, exit=exit)
   else:
       return  redirect(url_for("login"))
+
+@app.route("/account")
+@login_required
+def account():
+    exit = Exit()
+    return render_template("account.html",exit=exit)
 @app.route('/logout', methods=["POST"])
 def logout():
     exit = Exit()
+    logout_user()
+    flash("You have logged out")
     session.pop('name', default=None)
     return redirect(url_for("login"))
 
@@ -68,6 +77,8 @@ def change_pasw():
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("info"))
     form = LoginForm()
     reg = RegistrationForm()
     if form.validate_on_submit():
@@ -80,8 +91,10 @@ def login():
          session['password']=password
         else:
           return redirect(url_for("home"))
-        
+        user = db.session.query(User).filter_by(username=name).first() 
+        print(user)
         if db.session.query(User.password).filter_by(username=name).first()!=None and User.verify_password(db.session.query(User.password).filter_by(username=name).first(),password):
+            login_user(user, remember=form.remember.data)
             flash("Вхід виконано", category="success")
             return redirect(url_for("info", name=name))
         flash("Вхід не виконано", category="danger")
@@ -89,6 +102,8 @@ def login():
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("info"))
     reg = RegistrationForm()
     form = LoginForm()
     if reg.validate_on_submit():
