@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import EmailField,TextAreaField, IntegerField,BooleanField,StringField, PasswordField, SubmitField
-from wtforms.validators import Regexp, ValidationError, Email,EqualTo, DataRequired, Length, NumberRange
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import  EmailField,TextAreaField, IntegerField,BooleanField,StringField, PasswordField, SubmitField
+from wtforms.validators import  Regexp, ValidationError, Email,EqualTo, DataRequired, Length, NumberRange
 from .models import User
 class LoginForm(FlaskForm):
     name = StringField("Username",
@@ -37,6 +38,22 @@ class RegistrationForm(FlaskForm):
             raise ValidationError("This email is already registered")
     def validate_name(self, field):
         if User.query.filter_by(username=field.data).first():
+            raise ValidationError("This username is already in use")
+
+class UpdateProfileForm(FlaskForm):
+    new_name = StringField("Username",
+                           validators=[Length(min=4, max=14),
+                            DataRequired(message="Це поле обов'язкове"),
+                            Regexp('^[A-Za-z][A-Za-z0-9_.]*$',0,'Username must have only letters, numbers, dots or underscores')])
+    new_email = EmailField("Email", validators=[Email(),DataRequired(message="Це поле обов'язкове")])
+    picture = FileField("Update profile picture", validators=[FileAllowed(['jpg','png'])] )
+    submit = SubmitField("Update")
+    
+    def validate_new_email(self, field):
+        if User.query.filter_by(email=field.data).first() and self.new_email.data!=field.data:
+            raise ValidationError("This email is already registered")
+    def validate_new_name(self, field):
+        if User.query.filter_by(username=field.data).first() and self.new_name.data!=field.data:
             raise ValidationError("This username is already in use")
 
 

@@ -6,14 +6,33 @@
 <body>
     <br>
     {% block content %}
-    <h1 class="info"> Name of the user: {{ current_user.username }}</h1>
-    {% endblock %}
+    <div style="float: left; margin-left: 10%;">
+    <img class="rounded-circle" src="{{ image_file }}">
+    <h1 class="info"> {{ current_user.username }}</h1>
+    <div class="info">
+    <p > {{ current_user.email }}</p>
+    <p>Last seen: {{ current_user.last_seen }}</p>
+    </div>
+    </div>
     <br>
-    <div class="login">
-    <form action={{url_for("logout")}}  method="POST"  novalidate>
+
+    <div style="float: right; margin-right: 15%;">
+        <form class="login" action={{url_for("account")}}  method="POST"  novalidate>
+            {{ form.csrf_token }}
+            {{ render_field(form.new_name, class="form-control" )}}
+            {{ render_field(form.new_email, class="form-control" )}}
+            {{ render_field(form.picture, class="form-control", type="file", style="min-width: 300px", id="formFile")}}
+            {{form.submit(class="btn btn-primary")}}
+          
+        </form>     
+        <br>
+    <form class="login" action={{url_for("logout")}}  method="POST"  novalidate>
         {{ exit.csrf_token }}
         {{ exit.submit(class="btn btn-primary") }}
     </form>                         
 </div>
+
+    {% endblock %}
+   
 </body>
 {% endblock %}

@@ -1,3 +1,4 @@
+from datetime import datetime
 from app import db, login_manager 
 from flask_login import UserMixin
 from app import bcrypt
@@ -22,7 +23,7 @@ class User(db.Model):
     email = db.Column(db.String(120),  unique=True, nullable=False)
     image_file =  db.Column(db.String(120),  nullable=False, default="default.jpg")
     password = db.Column(db.String(60), nullable=False)
-   
+    last_seen = db.Column(db.DateTime, default=datetime.now())
     def __init__(self,username, email,password):
         self.username=username
         self.email=email

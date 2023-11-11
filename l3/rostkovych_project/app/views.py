@@ -2,7 +2,7 @@ from collections import defaultdict
 from flask import flash, request, render_template,redirect ,url_for, make_response, session;
 from app import app
 import os
-from .forms import RegistrationForm, ReviewForm,LoginForm, ChangePassword, Exit, Todo
+from .forms import UpdateProfileForm, RegistrationForm, ReviewForm,LoginForm, ChangePassword, Exit, Todo
 from datetime import datetime
 from flask import request
 import json
@@ -17,6 +17,15 @@ with open(path_to_json, "r") as handler:
 @app.context_processor
 def inject_user():
     return dict(data=os.name, user_agent=request.headers.get('User-Agent'),t=datetime.now().strftime("%H:%M:%S"))
+@app.after_request
+def after_request(response):
+       if current_user:
+            current_user.last_seen = datetime.now()
+            try:
+                     db.session.commit()
+            except:
+                     flash('Error while update user last seen!', 'danger')
+            return response
 
 @app.route('/')
 def home():
@@ -42,7 +51,7 @@ def info():
   change = ChangePassword()
      
   exit = Exit()
-  name = request.args['name']
+  name = current_user.username
   if name!=None:
     dict = request.cookies.to_dict()
     dict.pop("session")  
@@ -50,11 +59,26 @@ def info():
   else:
       return  redirect(url_for("login"))
 
-@app.route("/account")
+@app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
     exit = Exit()
-    return render_template("account.html",exit=exit)
+    update = UpdateProfileForm()
+    image_file = url_for('static', filename='profile_img/'+current_user.image_file)
+    new_name = update.new_name.data
+    new_email =  update.new_email.data
+    image_file = url_for('static', filename='profile_img/'+current_user.image_file)
+    if update.validate_on_submit():
+            updated = User.query.filter_by(username=current_user.username).first()
+            updated.username = new_name
+            updated.email = new_email
+            db.session.commit()
+    else:
+     update.new_name.data = current_user.username
+     update.new_email.data = current_user.email
+    return render_template("account.html",exit=exit, image_file=image_file, form=update)
+    
+   
 @app.route('/logout', methods=["POST"])
 def logout():
     exit = Exit()
@@ -69,16 +93,18 @@ def change_pasw():
    if form.validate_on_submit():
         p1 = form.password.data
         
-        if(User.verify_password(db.session.query(User.password).filter_by(username=session['name']).first(),p1)):
-            session['password']= form.new_password.data
-            User.password = form.new_password.data
+        if(User.verify_password(db.session.query(User.password).filter_by(username=current_user.username).first(),form.password.data)):
+        
+            updated = User.query.filter_by(username=current_user.username).first()
+            updated.password = User.password(form.new_password.data)
+            db.session.commit()
             flash("The password is changed", category="success")
             with open(path_to_json, "w") as jsonFile:
               data['password']=form.new_password.data
               json.dump(data, jsonFile)
         else:
              flash("The password is not changed", category="danger") 
-   return redirect(url_for("info",name=session['name'], change=form))
+   return redirect(url_for("info",name=current_user.username, change=form))
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
