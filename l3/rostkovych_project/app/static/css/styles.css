@@ -16,6 +16,9 @@ label{
   color: rgb(255, 255, 255) !important;
   font-size: 100%;
 }
+.rounded-circle{
+  width: 50%;
+}
 form{
   width:100%;
   text-align: center;
@@ -25,6 +28,31 @@ form{
   text-align:left;
 
 }
+.parent {
+  display: table;
+
+}
+.child {
+  display: table-cell;
+
+}
+.childinner {
+  margin-left: 155%;
+
+ 
+  /* Decorative .. */
+ 
+  min-height: 40px;
+}
+.childinner legend{
+  font-size: 130%;
+  font-weight: bold;
+}
+.child:first-child .childinner {
+  margin-left: 30%;
+
+}
+
 .btn{
   min-width: 200px;
 }

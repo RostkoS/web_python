@@ -10,6 +10,8 @@ app.secret_key = b"secret"
 csrf = CSRFProtect()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flaskdb.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+app.config['UPLOAD_FOLDER']
+
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
 bcrypt = Bcrypt(app)

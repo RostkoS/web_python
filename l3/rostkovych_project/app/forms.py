@@ -69,6 +69,12 @@ class ChangePassword(FlaskForm):
                                  DataRequired("Це поле обов'язкове"),
                                  Length(min=4, max=10)
                              ])
+    confirm_password = PasswordField("Confirm Password",
+                             validators=[
+                                 DataRequired("Це поле обов'язкове"),
+                                 Length(min=6),
+                                 EqualTo('new_password')
+                             ])
     submit = SubmitField("Change Password")
 class Exit(FlaskForm):
   submit = SubmitField("Exit")

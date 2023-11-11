@@ -48,14 +48,13 @@ def skills(id=None):
 
 @app.route('/info')
 def info():
-  change = ChangePassword()
-     
+ 
   exit = Exit()
   name = current_user.username
   if name!=None:
     dict = request.cookies.to_dict()
     dict.pop("session")  
-    return render_template("info.html", name=name, cookies=dict, change=change, exit=exit)
+    return render_template("info.html", name=name, cookies=dict,  exit=exit)
   else:
       return  redirect(url_for("login"))
 
@@ -63,11 +62,12 @@ def info():
 @login_required
 def account():
     exit = Exit()
+    change = ChangePassword()
+     
     update = UpdateProfileForm()
     image_file = url_for('static', filename='profile_img/'+current_user.image_file)
     new_name = update.new_name.data
     new_email =  update.new_email.data
-    image_file = url_for('static', filename='profile_img/'+current_user.image_file)
     if update.validate_on_submit():
             updated = User.query.filter_by(username=current_user.username).first()
             updated.username = new_name
@@ -76,7 +76,7 @@ def account():
     else:
      update.new_name.data = current_user.username
      update.new_email.data = current_user.email
-    return render_template("account.html",exit=exit, image_file=image_file, form=update)
+    return render_template("account.html",exit=exit, image_file=image_file, form=update,change=change)
     
    
 @app.route('/logout', methods=["POST"])
@@ -89,22 +89,22 @@ def logout():
 
 @app.route('/change_pasw', methods=["POST"])
 def change_pasw():
-   form = ChangePassword()
-   if form.validate_on_submit():
-        p1 = form.password.data
+   change = ChangePassword()
+   if change.validate_on_submit():
+        p1 = change.password.data
         
-        if(User.verify_password(db.session.query(User.password).filter_by(username=current_user.username).first(),form.password.data)):
+        if(User.verify_password(db.session.query(User.password).filter_by(username=current_user.username).first(),change.password.data)):
         
             updated = User.query.filter_by(username=current_user.username).first()
-            updated.password = User.password(form.new_password.data)
+            updated.password = User.change_password(change.new_password.data)
             db.session.commit()
             flash("The password is changed", category="success")
             with open(path_to_json, "w") as jsonFile:
-              data['password']=form.new_password.data
+              data['password']=change.new_password.data
               json.dump(data, jsonFile)
         else:
              flash("The password is not changed", category="danger") 
-   return redirect(url_for("info",name=current_user.username, change=form))
+   return redirect(url_for("account",name=current_user.username, change=change))
 
 @app.route('/login', methods=["GET", "POST"])
 def login():

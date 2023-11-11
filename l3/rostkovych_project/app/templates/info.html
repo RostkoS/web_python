@@ -54,12 +54,7 @@
                     <br>
                     <br>
                     <div class="container">
-                    <form class="login" action={{url_for("change_pasw")}} method="POST" novalidate>
-                            {{ change.csrf_token }}
-                            {{ render_field(change.password, class="form-control", placeholder="Current Password" )}}
-                            {{ render_field(change.new_password, class="form-control", placeholder="New Password") }}
-                            {{ change.submit(class="btn btn-primary") }}
-                        </form>
+                    
                     </div>
                             <br>
                             <form action={{url_for("logout")}}  method="POST"  novalidate>

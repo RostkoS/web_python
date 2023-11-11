@@ -31,7 +31,9 @@ class User(db.Model):
 
     def verify_password(self, pswrd):
         return bcrypt.check_password_hash(self.password,pswrd)
-
+    def change_password(pswrd):
+        return  bcrypt.generate_password_hash(pswrd)
+       
     def is_authenticated(self, username, password)  :
         if self.username==username and password == self.password:
             return True  

@@ -6,18 +6,36 @@
 <body>
     <br>
     {% block content %}
-    <div style="float: left; margin-left: 10%;">
+    <div class="parent">
+    <div class="child">
+    <div class="childinner">
     <img class="rounded-circle" src="{{ image_file }}">
     <h1 class="info"> {{ current_user.username }}</h1>
+    </div>
     <div class="info">
-    <p > {{ current_user.email }}</p>
-    <p>Last seen: {{ current_user.last_seen }}</p>
+    <p class="childinner"> {{ current_user.email }}</p>
+    <p class="childinner">Last seen: {{ current_user.last_seen }}</p>
     </div>
+    <div class="childinner">
+    <form class="login" action={{url_for("logout")}}  method="POST"  novalidate>
+        {{ exit.csrf_token }}
+        {{ exit.submit(class="btn btn-primary") }}
+    </form>  
+</div>
     </div>
-    <br>
-
-    <div style="float: right; margin-right: 15%;">
-        <form class="login" action={{url_for("account")}}  method="POST"  novalidate>
+    <div class="child">
+    <form class="childinner" action={{url_for("change_pasw")}} method="POST" novalidate>
+        {{ change.csrf_token }}
+        <legend class="info">Change password</legend>
+        {{ render_field(change.password, class="form-control", placeholder="Current Password" )}}
+        {{ render_field(change.new_password, class="form-control", placeholder="New Password") }}
+        {{ render_field(change.confirm_password, class="form-control", placeholder="Confirm Password") }}
+        {{ change.submit(class="btn btn-primary") }}
+    </form>
+    </div>
+    <div class="child">
+        <form class="childinner" action={{url_for("account")}}  method="POST"  novalidate>
+            <legend class="info">Change info</legend>
             {{ form.csrf_token }}
             {{ render_field(form.new_name, class="form-control" )}}
             {{ render_field(form.new_email, class="form-control" )}}
@@ -26,10 +44,8 @@
           
         </form>     
         <br>
-    <form class="login" action={{url_for("logout")}}  method="POST"  novalidate>
-        {{ exit.csrf_token }}
-        {{ exit.submit(class="btn btn-primary") }}
-    </form>                         
+    </div>
+                          
 </div>
 
     {% endblock %}
