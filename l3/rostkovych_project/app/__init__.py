@@ -10,7 +10,8 @@ app.secret_key = b"secret"
 csrf = CSRFProtect()
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///flaskdb.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
-app.config['UPLOAD_FOLDER']
+app.config['UPLOAD_FOLDER'] = "static\profile_img"
+app.config['MAX_CONTENT_PATH'] = 622080
 
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)

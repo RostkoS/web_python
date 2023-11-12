@@ -2,13 +2,17 @@ from collections import defaultdict
 from flask import flash, request, render_template,redirect ,url_for, make_response, session;
 from app import app
 import os
+import secrets
+from PIL import Image
 from .forms import UpdateProfileForm, RegistrationForm, ReviewForm,LoginForm, ChangePassword, Exit, Todo
 from datetime import datetime
 from flask import request
 import json
+
 from app import db
 from flask_login import login_required, login_user, current_user, logout_user
 from .models import Tasks, Review, User
+from werkzeug.utils import secure_filename
 path_to_json = "app\static\data.json"
 with open(path_to_json, "r") as handler:
     data = json.load(handler)
@@ -58,6 +62,19 @@ def info():
   else:
       return  redirect(url_for("login"))
 
+def save_picture(f):
+    random_hex = secrets.token_hex(8)
+    f_name, f_ext = os.path.splitext(f.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path,'static/profile_img', picture_fn)
+    print("!!!!!!!!!!") 
+    output_size = (125,125)
+    i = Image.open(f)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    return picture_fn
+
+
 @app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
@@ -65,17 +82,26 @@ def account():
     change = ChangePassword()
      
     update = UpdateProfileForm()
-    image_file = url_for('static', filename='profile_img/'+current_user.image_file)
     new_name = update.new_name.data
     new_email =  update.new_email.data
     if update.validate_on_submit():
             updated = User.query.filter_by(username=current_user.username).first()
             updated.username = new_name
-            updated.email = new_email
+            updated.email = new_email 
+
+            if update.picture.data:
+                 f = save_picture(update.picture.data)
+                 current_user.image_file = f
+                 updated.image_file = f
             db.session.commit()
+            if updated.username!=current_user.username or updated.email!=current_user.email or update.picture.data:
+              flash("The profile is updated", category="success")
+            
     else:
      update.new_name.data = current_user.username
      update.new_email.data = current_user.email
+    image_file = url_for('static', filename='profile_img/'+current_user.image_file)
+     
     return render_template("account.html",exit=exit, image_file=image_file, form=update,change=change)
     
    

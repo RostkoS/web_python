@@ -34,7 +34,7 @@
     </form>
     </div>
     <div class="child">
-        <form class="childinner" action={{url_for("account")}}  method="POST"  novalidate>
+        <form class="childinner" action={{url_for("account")}}  method="POST" enctype="multipart/form-data" novalidate>
             <legend class="info">Change info</legend>
             {{ form.csrf_token }}
             {{ render_field(form.new_name, class="form-control" )}}
