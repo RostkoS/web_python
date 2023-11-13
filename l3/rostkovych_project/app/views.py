@@ -89,7 +89,7 @@ def account():
             updated = User.query.filter_by(username=current_user.username).first()
             updated.username = new_name
             updated.email = new_email 
-
+            updated.about = update.about.data
             if update.picture.data:
                  f = save_picture(update.picture.data)
                  current_user.image_file = f
@@ -101,6 +101,7 @@ def account():
     else:
      update.new_name.data = current_user.username
      update.new_email.data = current_user.email
+     update.about.data = current_user.about
     image_file = url_for('static', filename='profile_img/'+current_user.image_file)
      
     return render_template("account.html",exit=exit, image_file=image_file, form=update,change=change)

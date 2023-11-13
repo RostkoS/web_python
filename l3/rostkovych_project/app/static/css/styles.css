@@ -30,7 +30,7 @@ form{
 }
 .parent {
   display: table;
-
+  margin-top: -2%;
 }
 .child {
   display: table-cell;

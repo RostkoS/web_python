@@ -10,10 +10,12 @@
     <div class="child">
     <div class="childinner">
     <img class="rounded-circle" src="{{ image_file }}">
+ 
     <h1 class="info"> {{ current_user.username }}</h1>
     </div>
     <div class="info">
     <p class="childinner"> {{ current_user.email }}</p>
+    <p class="childinner">About Me: {{ current_user.about }}</p>
     <p class="childinner">Last seen: {{ current_user.last_seen }}</p>
     </div>
     <div class="childinner">
@@ -39,6 +41,7 @@
             {{ form.csrf_token }}
             {{ render_field(form.new_name, class="form-control" )}}
             {{ render_field(form.new_email, class="form-control" )}}
+            {{ render_field(form.about, class="form-control" )}}
             {{ render_field(form.picture, class="form-control", type="file", style="min-width: 300px", id="formFile")}}
             {{form.submit(class="btn btn-primary")}}
           

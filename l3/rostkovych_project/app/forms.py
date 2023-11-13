@@ -57,6 +57,8 @@ class UpdateProfileForm(FlaskForm):
                             Regexp('^[A-Za-z][A-Za-z0-9_.]*$',0,'Username must have only letters, numbers, dots or underscores')])
     new_email = EmailField("Email", validators=[Email(),DataRequired(message="Це поле обов'язкове")])
     picture = FileField("Update profile picture", validators=[FileAllowed(['jpg','png'])] )
+    about = TextAreaField("About Me")
+   
     submit = SubmitField("Update")
     
     
