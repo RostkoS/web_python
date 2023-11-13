@@ -9,7 +9,7 @@
     <div class="parent">
     <div class="child">
     <div class="childinner">
-    <img class="rounded-circle" src="{{ image_file }}">
+    <img class="rounded-circle" src="{{ url_for('static', filename='profile_img/'+current_user.image_file) }}">
  
     <h1 class="info"> {{ current_user.username }}</h1>
     </div>

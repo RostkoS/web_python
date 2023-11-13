@@ -102,9 +102,8 @@ def account():
      update.new_name.data = current_user.username
      update.new_email.data = current_user.email
      update.about.data = current_user.about
-    image_file = url_for('static', filename='profile_img/'+current_user.image_file)
      
-    return render_template("account.html",exit=exit, image_file=image_file, form=update,change=change)
+    return render_template("account.html",exit=exit, form=update,change=change)
     
    
 @app.route('/logout', methods=["POST"])
@@ -119,7 +118,6 @@ def logout():
 def change_pasw():
    change = ChangePassword()
    exit=Exit()
-   image_file = url_for('static', filename='profile_img/'+current_user.image_file)
    update =UpdateProfileForm()
    if change.validate_on_submit():
         p1 = change.password.data
@@ -135,7 +133,7 @@ def change_pasw():
               json.dump(data, jsonFile)
         else:
              flash("The password is not changed", category="danger") 
-   return render_template("account.html",exit=exit, image_file=image_file, form=update,change=change)
+   return render_template("account.html",exit=exit, form=update,change=change)
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
