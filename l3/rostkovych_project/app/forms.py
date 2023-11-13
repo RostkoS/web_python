@@ -3,6 +3,7 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import  EmailField,TextAreaField, IntegerField,BooleanField,StringField, PasswordField, SubmitField
 from wtforms.validators import  Regexp, ValidationError, Email,EqualTo, DataRequired, Length, NumberRange
 from .models import User
+from flask_login import current_user
 class LoginForm(FlaskForm):
     name = StringField("Username",
                            validators=[DataRequired(message="Це поле обов'язкове")])
@@ -41,6 +42,15 @@ class RegistrationForm(FlaskForm):
             raise ValidationError("This username is already in use")
 
 class UpdateProfileForm(FlaskForm):
+    def validate_new_email(self, field):
+      if field.data != current_user.email:
+        if User.query.filter_by(email=field.data).first():
+             raise ValidationError("This email is already registered")
+    def validate_new_name(self, field):
+        if field.data != current_user.username:
+          if User.query.filter_by(username=field.data).first():
+            raise ValidationError("This username is already in use")
+
     new_name = StringField("Username",
                            validators=[Length(min=4, max=14),
                             DataRequired(message="Це поле обов'язкове"),
@@ -49,13 +59,7 @@ class UpdateProfileForm(FlaskForm):
     picture = FileField("Update profile picture", validators=[FileAllowed(['jpg','png'])] )
     submit = SubmitField("Update")
     
-    def validate_new_email(self, field):
-        if User.query.filter_by(email=field.data).first() and self.new_email.data!=field.data:
-            raise ValidationError("This email is already registered")
-    def validate_new_name(self, field):
-        if User.query.filter_by(username=field.data).first() and self.new_name.data!=field.data:
-            raise ValidationError("This username is already in use")
-
+    
 
 
 class ChangePassword(FlaskForm):
