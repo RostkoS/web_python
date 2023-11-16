@@ -19,14 +19,14 @@
     <p class="childinner">Last seen: {{ current_user.last_seen }}</p>
     </div>
     <div class="childinner">
-    <form class="login" action={{url_for("logout")}}  method="POST"  novalidate>
+    <form class="login" action={{url_for(".logout")}}  method="POST"  novalidate>
         {{ exit.csrf_token }}
         {{ exit.submit(class="btn btn-primary") }}
     </form>  
 </div>
     </div>
     <div class="child">
-    <form class="childinner" action={{url_for("change_pasw")}} method="POST" novalidate>
+    <form class="childinner" action={{url_for(".change_pasw")}} method="POST" novalidate>
         {{ change.csrf_token }}
         <legend class="info">Change password</legend>
         {{ render_field(change.password, class="form-control", placeholder="Current Password" )}}
@@ -36,7 +36,7 @@
     </form>
     </div>
     <div class="child">
-        <form class="childinner" action={{url_for("account")}}  method="POST" enctype="multipart/form-data" novalidate>
+        <form class="childinner" action={{url_for(".account")}}  method="POST" enctype="multipart/form-data" novalidate>
             <legend class="info">Change info</legend>
             {{ form.csrf_token }}
             {{ render_field(form.new_name, class="form-control" )}}

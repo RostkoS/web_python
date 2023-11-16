@@ -10,7 +10,7 @@
 <br>
 <div class="container">
   <div  style="float:left;">
-  <form class="login" action={{url_for("register")}} method="POST" novalidate>
+  <form class="login" action={{url_for(".register")}} method="POST" novalidate>
     {{ reg.csrf_token }}
     <legend class="info">Register</legend>
     {{ render_field(reg.name, class="form-control" )}}
@@ -21,7 +21,7 @@
   </form>
 </div>
   <div  style="float:right; margin-right: 10%;">
-<form class="login" action={{url_for("login")}} method="POST" novalidate>
+<form class="login" action={{url_for(".login")}} method="POST" novalidate>
   <legend class="info">Log In</legend>
   {{ form.csrf_token }}
 
