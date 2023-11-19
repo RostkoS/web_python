@@ -5,11 +5,9 @@ from flask_login import current_user
 import json
 import os
 from app import db
+from . import main
 
 
-
-main = Blueprint('main', __name__,
-        template_folder='main')
 
 
 @main.context_processor

@@ -1,12 +1,11 @@
-from flask import Blueprint, url_for, redirect, render_template,flash, app
+from flask import url_for, redirect, render_template,flash, app
 from flask_login import login_required, login_user, logout_user, current_user
 from .forms import LoginForm, RegistrationForm, Exit, ChangePassword, UpdateProfileForm
 from .models import User, db
 import os
 import secrets
-
+from . import auth
 from PIL import Image
-auth = Blueprint('auth', __name__,  template_folder='auth')
 
 @auth.route("/account", methods=["GET", "POST"])
 @login_required
@@ -19,6 +18,8 @@ def account():
             new_name = update.new_name.data
             new_email =  update.new_email.data
             updated = User.query.filter_by(username=current_user.username).first()
+            if updated.username!=update.new_name.data or updated.email!=update.new_email.data or update.picture.data:
+              flash("The profile is updated", category="success")
             updated.username = new_name
             updated.email = new_email 
             updated.about = update.about.data
@@ -27,8 +28,7 @@ def account():
                  current_user.image_file = f
                  updated.image_file = f
             db.session.commit()
-            if updated.username!=current_user.username or updated.email!=current_user.email or update.picture.data:
-              flash("The profile is updated", category="success")
+
             
     else:
      update.new_name.data = current_user.username
@@ -41,8 +41,7 @@ def save_picture(f):
     random_hex = secrets.token_hex(8)
     f_name, f_ext = os.path.splitext(f.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path,'static/profile_img', picture_fn)
-    print("!!!!!!!!!!") 
+    picture_path = os.path.join('app/static/profile_img', picture_fn)
     output_size = (125,125)
     i = Image.open(f)
     i.thumbnail(output_size)
@@ -66,7 +65,7 @@ def login():
         if db.session.query(User.password).filter_by(username=name).first()!=None and User.verify_password(db.session.query(User.password).filter_by(username=name).first(),password):
             login_user(user, remember=form.remember.data)
             flash("Вхід виконано", category="success")
-            return redirect(url_for("form_cabinet.info", name=name))
+            return redirect(url_for(".account", name=name))
         flash("Вхід не виконано", category="danger")
     return render_template("login.html", form=form,reg=reg)
 @auth.route('/logout', methods=["POST"])
@@ -99,7 +98,7 @@ def change_pasw():
 @auth.route('/register', methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for("form_cabinet.info"))
+        return redirect(url_for(".account"))
     reg = RegistrationForm()
     form = LoginForm()
     if reg.validate_on_submit():

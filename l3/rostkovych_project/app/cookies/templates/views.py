@@ -6,10 +6,8 @@ from flask_login import current_user
 import json
 import os
 from app import db
+from . import cookies
 
-
-cookies = Blueprint('cookies', __name__,
-        template_folder='cookies')
 
 path_to_json = "app\static\data.json"
 with open(path_to_json, "r") as handler:

@@ -8,4 +8,4 @@ class Tasks(db.Model):
     title = db.Column(db.String(100))
     description = db.Column(db.String(600))
     complete = db.Column(db.Boolean)
-
+    

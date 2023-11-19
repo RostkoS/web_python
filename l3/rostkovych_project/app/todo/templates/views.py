@@ -4,12 +4,8 @@ from .forms import ReviewForm, Todo
 from datetime import datetime
 from flask_login import current_user
 from app import db
-
+from . import todo
 from .models import Tasks
-
-todo = Blueprint('todo', __name__,
-        template_folder='todo')
-
 
 @todo.route('/tasks', methods=["POST","GET"])
 def tasks():

@@ -8,9 +8,8 @@ import os
 from app import db
 
 from .models import Review
+from . import sam
 
-sam = Blueprint('sam', __name__,
-        template_folder='sam')
 
 @sam.route('/review', methods=["POST","GET"])
 def review():
