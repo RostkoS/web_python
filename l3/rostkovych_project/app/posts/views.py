@@ -1,8 +1,8 @@
 from collections import defaultdict
 from flask import Blueprint,flash, request, render_template,redirect ,url_for, make_response, session;
-from .forms import CreatePostForm, UpdatePostForm
+from .forms import CreatePostForm, UpdatePostForm, AddCategoryForm
 from datetime import datetime
-from .models import Posts
+from .models import Posts, Category
 from flask_login import current_user
 from app import db
 from . import posts
@@ -37,6 +37,29 @@ def create():
     db.session.commit()
     return redirect(url_for(".view_all"))
    return render_template("create.html",form = new_post)
+@posts.route('posts/add_category', methods=["POST","GET"])
+def add_category():
+   new = AddCategoryForm()
+   
+   if new.validate_on_submit():
+    
+    name = new.name.data
+    new = Category(name=name)
+    db.session.add(new)
+    db.session.commit()
+    return redirect(url_for(".view_all"))
+   return render_template("add_category.html",form = new)
+@posts.route('posts/del_category', methods=["POST","GET"])
+def del_category():
+   new = AddCategoryForm()
+   
+   if new.validate_on_submit():
+    id = Category.query.filter_by(name=new.name.data).first().id
+    chosen = db.get_or_404(Category, id)
+    db.session.delete(chosen)
+    db.session.commit()
+    return redirect(url_for(".view_all"))
+   return render_template("del_category.html",form = new)
 
 @posts.route('/posts/<int:post_id>', methods=["GET"])
 def view_post(post_id):

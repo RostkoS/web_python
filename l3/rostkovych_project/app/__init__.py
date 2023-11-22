@@ -7,6 +7,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from config import config
 
+
 naming_convention = {
     "ix": 'ix_%(column_0_label)s',
     "uq": "uq_%(table_name)s_%(column_0_name)s",
@@ -37,6 +38,7 @@ def create_app(config_name="dev"):
     from app.main.templates.views import main
     from app.sam.templates.views import sam
     from app.posts.views import posts
+
     with app.app_context():
         app.register_blueprint(auth, url_prefix="/")
         app.register_blueprint(todo, url_prefix='/')

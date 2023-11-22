@@ -4,12 +4,6 @@ posts = Blueprint('posts', __name__,
 import enum
 class EnumPriority(enum.Enum):
 
-      low = 1 
+      short = 1 
       medium = 2 
-      high = 3
-
-class EnumCategoty(enum.Enum):
-
-      low = 1 
-      medium = 2 
-      high = 3
+      long = 3
