@@ -4,31 +4,28 @@
 
 {% block body %}
 <body>
+    <div class="container">
     {% if chosen is defined %}
-    <table class="todo">
-         <thead>
-             <th>№</th>
-             <th>Title</th>
-             <th>Text</th>
-             <th>Image</th>
-             <th>Type</th>
-         </thead>
-         <tbody>
-             <tr>
-                 <th>{{chosen.id}}</th>
-                 <td>{{chosen.title}}</td>
-                 <td>{{chosen.text}}</td>
-                 <td>{{chosen.image}}</td>
-                 <td>{{chosen.type.name}}</td>
+    <h1 class="info">{{chosen.title}}</h1>
+    <div class="info">  
+        <p>{{chosen.type.name}}</p>
+        <p>{{chosen.get_category().name}}</p>
+        {% for i in chosen.get_tags(chosen.id) %}
+           <p>{{i}}</p>
+        {% endfor %}   
+        <img class="center" src="{{ url_for('static', filename='post_img/'+chosen.image_file) }}">
+    
+                 <p>{{chosen.text}}</p>
+              
+    </div>
                  {% if current_user.id==chosen.user_id %}
                  <td>  <a class="btn btn-success" href={{url_for(".update", id = chosen.id)}}>Update</a></td>
                  <td>  <a class="btn btn-danger" href={{url_for(".delete", id = chosen.id)}}>Delete</a></td>
                 {% endif %}
                 </tr>
-         </tbody>
-     </table>
      {% else %}
      <p1 class="info">Post not found</p1>
      {% endif %}
+</div>
 </body>
 {% endblock %}

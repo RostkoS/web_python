@@ -2,7 +2,7 @@ from collections import defaultdict
 from flask import Blueprint,flash, request, render_template,redirect ,url_for, make_response, session;
 from .forms import CreatePostForm, UpdatePostForm, AddCategoryForm
 from datetime import datetime
-from .models import Posts, Category
+from .models import Posts, Category, Tag, Tag_Post
 from flask_login import current_user
 from app import db
 from . import posts
@@ -14,7 +14,7 @@ def save_picture(f):
     random_hex = secrets.token_hex(8)
     f_name, f_ext = os.path.splitext(f.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join('app/static/profile_img', picture_fn)
+    picture_path = os.path.join('app/static/post_img', picture_fn)
     output_size = (125,125)
     i = Image.open(f)
     i.thumbnail(output_size)
@@ -22,21 +22,28 @@ def save_picture(f):
     return picture_fn
 @posts.route('posts/create', methods=["POST","GET"])
 def create():
-   new_post = CreatePostForm()
+  new_post = CreatePostForm()
    
-   if new_post.validate_on_submit():
+  if new_post.validate_on_submit():
+   
     text = new_post.text.data
     title = new_post.title.data
     type = new_post.type.data
-    new = Posts(title=title,text=text,type= type, user_id=current_user.id)
-    
+    category_name = new_post.category.data
+    category = db.session.query(Category).filter_by(name=category_name).first()
+    new = Posts(title=title,text=text,type= type, user_id=current_user.id, category_id=category.id)
+    for v in  new_post.tags.data:
+          tag_name = v
+          new = Tag_Post(post_id = new.id, tag_id=db.session.query(Tag).filter_by(name=tag_name).first().id)
+          db.session.add(new)
+          db.session.commit()
     if new_post.image.data:
         image = save_picture(new_post.image.data)
         new.image_file = image
     db.session.add(new)
     db.session.commit()
     return redirect(url_for(".view_all"))
-   return render_template("create.html",form = new_post)
+  return render_template("create.html",form = new_post)
 @posts.route('posts/add_category', methods=["POST","GET"])
 def add_category():
    new = AddCategoryForm()
@@ -70,26 +77,40 @@ def view_post(post_id):
 def update(id):
    form = UpdatePostForm()
    chosen = Posts.query.filter_by(id=id).first()
- 
-   print(form.title.data)
-   #print(chosen)
-   if form.validate_on_submit():
-      chosen.title = form.title.data
-      chosen.text = form.text.data
-      chosen.type = form.type.data
-      chosen.enabled = form.enabled.data
    
-      db.session.commit()
-      return redirect(url_for(".view_post", post_id = id)) 
+   if form.validate_on_submit():
+        ex = db.session.query(Tag_Post).filter_by(post_id=id).all()
+        for e in ex:
+               db.session.delete(e)
+        for v in  form.tags.data:
+          tag_name = v
+          new = Tag_Post(post_id = id, tag_id=db.session.query(Tag).filter_by(name=tag_name).first().id)
+          db.session.add(new)
+          db.session.commit()
+        chosen.title = form.title.data
+        chosen.text = form.text.data
+        chosen.type = form.type.data
+        chosen.enabled = form.enabled.data
+         
+        category_name = form.category.data
+        category = db.session.query(Category).filter_by(name=category_name).first()
+        chosen.category_id = category.id
+        db.session.commit()
+        return redirect(url_for(".view_post", post_id = id)) 
    else:
         form.title.data = chosen.title 
         form.text.data = chosen.text 
         form.type.data = chosen.type.name 
         form.enabled.data = chosen.enabled  
+      
+        form.category.data = chosen.get_category().name  
    return render_template("update.html", form=form,chosen = chosen, id=id)
 @posts.route('/posts/<int:id>/delete', methods=["GET","POST"])
 def delete(id):
    chosen = db.get_or_404(Posts, id)
+   ex = db.session.query(Tag_Post).filter_by(post_id=id).all()
+   for e in ex:
+               db.session.delete(e)
    db.session.delete(chosen)
    db.session.commit()
    return redirect(url_for(".view_all")) 

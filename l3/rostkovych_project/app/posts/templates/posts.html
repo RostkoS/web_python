@@ -6,11 +6,6 @@
 <body>
     {% if list is defined and list|length > 0 %}
     <table class="todo">
-         <thead>
-             <th>Title</th>
-             <th>Type</th>
-             <th>Enabled</th>
-         </thead>
          <tbody>
              {% for i in list %}
              <tr>
@@ -19,7 +14,9 @@
                     <a href={{url_for(".view_post", post_id = i.id)}}> {{i.title}}</a></td>
                    
                 </th>
+                 <td>{{i.get_category().name}}</td>
                  <td>{{i.type.name}}</td>
+                
                  <td>{{i.enabled}}</td>
                 </tr>
              {% endfor %}

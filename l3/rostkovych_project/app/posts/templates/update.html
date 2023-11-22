@@ -5,13 +5,17 @@
 {% block body %}
 <body>
     <div class="container">
-    <form  action={{url_for('.update', id=id)}} method="POST" novalidate>
+    <form class="login" action={{url_for('.update', id=id)}} method="POST" enctype="multipart/form-data" novalidate>
     {{ form.csrf_token }}
-    {{ render_field(form.title )}}
-    {{ render_field(form.text )}}
-    {{ render_field(form.image )}}
-    {{ render_field(form.type )}}
+    {{ render_field(form.title, class="form-control" )}}
+    {{ render_field(form.text, class="form-control" )}}
+    {{ render_field(form.image, class="form-control", type="file", style="min-width: 300px", id="formFile" )}}
+    {{ render_field(form.type, class="form-control" )}}
+    {{ render_field(form.category, class="form-control" )}}
+    {{ render_field(form.tags, class="form-control" )}}
+
     {{ render_field(form.enabled )}}
+    
     {{form.submit()}}
 </form>
 
