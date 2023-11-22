@@ -1,11 +1,8 @@
 from collections import defaultdict
-from flask import Blueprint,flash, request, render_template,redirect ,url_for, make_response, session;
-from .forms import ReviewForm, Todo
-from datetime import datetime
+from flask import request, render_template,redirect ,url_for, make_response, session;
 from flask_login import current_user
 import json
-import os
-from app import db
+
 from . import cookies
 
 

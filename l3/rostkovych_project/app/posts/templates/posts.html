@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %} Posts {% endblock %}
+{% from "_render_field.html" import render_field %}
+
+{% block body %}
+<body>
+    {% if list is defined and list|length > 0 %}
+    <table class="todo">
+         <thead>
+             <th>Title</th>
+             <th>Type</th>
+             <th>Enabled</th>
+         </thead>
+         <tbody>
+             {% for i in list %}
+             <tr>
+                 
+                 <th>
+                    <a href={{url_for(".view_post", post_id = i.id)}}> {{i.title}}</a></td>
+                   
+                </th>
+                 <td>{{i.type.name}}</td>
+                 <td>{{i.enabled}}</td>
+                </tr>
+             {% endfor %}
+         </tbody>
+     </table>
+     <p2 >Amount of posts = {{list|length}}</p1>
+     {% else %}
+     <p1 class="info">No posts found</p1>
+     {% endif %}
+</body>
+{% endblock %}

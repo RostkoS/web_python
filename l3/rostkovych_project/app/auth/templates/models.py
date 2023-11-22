@@ -2,6 +2,7 @@ from datetime import datetime
 from app import login_manager 
 from flask_login import UserMixin
 from app import bcrypt, db
+from app.posts.models import Posts
 
 @login_manager.user_loader
 def user_loader(id):
@@ -14,6 +15,8 @@ class User(db.Model):
     password = db.Column(db.String(60), nullable=False)
     about = db.Column(db.String(600),default="-")
     last_seen = db.Column(db.DateTime, default=datetime.now())
+    posts = db.relationship('Posts', backref='user')
+
     def __init__(self,username, email,password):
         self.username=username
         self.email=email

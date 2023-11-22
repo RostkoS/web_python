@@ -1,4 +1,4 @@
-from flask import url_for, redirect, render_template,flash, app
+from flask import url_for, redirect, render_template,flash
 from flask_login import login_required, login_user, logout_user, current_user
 from .forms import LoginForm, RegistrationForm, Exit, ChangePassword, UpdateProfileForm
 from .models import User, db
@@ -89,9 +89,6 @@ def change_pasw():
             updated.password = User.change_password(change.new_password.data)
             db.session.commit()
             flash("The password is changed", category="success")
-            with open(path_to_json, "w") as jsonFile:
-              data['password']=change.new_password.data
-              json.dump(data, jsonFile)
         else:
              flash("The password is not changed", category="danger") 
    return render_template("account.html",exit=exit, form=update,change=change)
