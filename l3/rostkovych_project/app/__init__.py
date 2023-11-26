@@ -32,11 +32,11 @@ def create_app(config_name="dev"):
     login_manager.login_view = 'login'
     login_manager.login_message_category='info'
     login_manager.init_app(app)
-    from app.auth.templates.view import auth
+    from app.auth.view import auth
     from app.todo.templates.views import todo
-    from app.cookies.templates.views import cookies
-    from app.main.templates.views import main
-    from app.sam.templates.views import sam
+    from app.cookies.views import cookies
+    from app.main.views import main
+    from app.sam.views import sam
     from app.posts.views import posts
 
     with app.app_context():

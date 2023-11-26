@@ -4,24 +4,29 @@
 
 {% block body %}
 <body>
+    <h1 class="create"><a class="btn btn-success" href={{url_for(".view_all")}}>View all</a></h1>
     <div class="container">
     {% if chosen is defined %}
     <h1 class="info">{{chosen.title}}</h1>
     <div class="info">  
-        <p>{{chosen.type.name}}</p>
-        <p>{{chosen.get_category().name}}</p>
+        <p>{{chosen.type.name}} {{chosen.get_category().name}}</p>
         {% for i in chosen.get_tags(chosen.id) %}
-           <p>{{i}}</p>
+        <p class="badge rounded-pill bg-success">{{i}}</p>
         {% endfor %}   
-        <img class="center" src="{{ url_for('static', filename='post_img/'+chosen.image_file) }}">
+  
+        <p>{{chosen.text}}</p>
+       
+        <img class="center" src="{{ url_for('.static', filename='post_img/'+chosen.image_file) }}">
     
-                 <p>{{chosen.text}}</p>
+           
               
-    </div>
+       </div>
                  {% if current_user.id==chosen.user_id %}
                  <td>  <a class="btn btn-success" href={{url_for(".update", id = chosen.id)}}>Update</a></td>
                  <td>  <a class="btn btn-danger" href={{url_for(".delete", id = chosen.id)}}>Delete</a></td>
-                {% endif %}
+                
+                
+                 {% endif %}
                 </tr>
      {% else %}
      <p1 class="info">Post not found</p1>

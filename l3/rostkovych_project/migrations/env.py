@@ -102,7 +102,6 @@ def run_migrations_online():
             target_metadata=get_metadata(),
             **conf_args
         )
-
         with context.begin_transaction():
             context.run_migrations()
 

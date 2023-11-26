@@ -56,9 +56,7 @@ form{
 .btn{
   min-width: 200px;
 }
-.create{
-  margin-left: 10%;
-}
+
 footer{
     margin-top: 10%;
     background-color:rgb(16, 43, 61);
@@ -121,19 +119,6 @@ footer{
 .rating{
   width: 10%;
 }
-.confirm{
-  margin-left: 10%;
-  margin-top: 1%;
-  margin-bottom: 1%;
-  background-color:#80808000;
-  width: 15%;
-  font-size: 180%;
-  color: rgb(255, 255, 255) !important;
-}
-.radio{
-  width: 120%;
-  font-size: 5rem;
-}
 .todo{
   margin-left: 10%;
   margin-top: 5%;
@@ -153,7 +138,6 @@ footer{
    display: grid;
     
 }
-
 .text{
     margin-left:3%;
     color: rgb(255, 255, 255) !important;
@@ -213,35 +197,7 @@ img{
     z-index: 1;
     transform: rotate(270deg);
 }
-.post{
-  margin-left: 10%;
-  margin-bottom: 1%;
-  background-color:#80808000;
-  width: 80%;
-  font-size: 180%;
-  color: rgb(255, 255, 255) !important;
-}
-.post tr:not(:first-child):nth-child(odd){
-  background-color: #1a395f;
-   
-}
-.head{
-  background-color: #0b1624;
-  padding: 2%;
-}
-.post th{
-  padding: 2%;
-  
-}
-.post td{
-  padding: 2%;
-  
-}
 
-.post tr:nth-child(even){
-  background-color: #122946;
-   
-}
 .half-arc:after {
     content: "";
     position: absolute;

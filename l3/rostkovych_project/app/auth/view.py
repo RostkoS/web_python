@@ -41,7 +41,7 @@ def save_picture(f):
     random_hex = secrets.token_hex(8)
     f_name, f_ext = os.path.splitext(f.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join('app/static/profile_img', picture_fn)
+    picture_path = os.path.join('app/auth/static/profile_img', picture_fn)
     output_size = (125,125)
     i = Image.open(f)
     i.thumbnail(output_size)

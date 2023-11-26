@@ -17,6 +17,13 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), default="general")
     posts = db.relationship('Posts', backref='category')
+    def get_all_choises():
+      cat_list = ["All"]
+      available_cat=Category.query.all()
+      for i in available_cat:
+        cat_list.append((i.name))
+      return cat_list
+   
     def category_choices():      
        return (v.name for v in db.session.query(Category).all())
 class Posts(db.Model):
@@ -37,7 +44,11 @@ class Posts(db.Model):
        tags =[]
        for i in range(0,len(tag_post)):
          tags.append(db.session.query(Tag.name).filter_by(id=tag_post[i].tag_id).first())
-       return tags
+       tag_name = []
+       for v in tags:
+          tag_name.append(v[0])
+       
+       return tag_name
     
     def get_category(self):
         return db.session.query(Category).filter_by(id=self.category_id).first()

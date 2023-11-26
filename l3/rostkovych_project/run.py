@@ -2,4 +2,4 @@ from app import create_app
 from os import environ
 app = create_app(config_name='dev')
 if __name__ == '__main__':
-     app.run(debug=True, port=65447)
+     app.run(debug=True)

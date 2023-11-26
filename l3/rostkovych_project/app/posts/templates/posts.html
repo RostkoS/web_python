@@ -1,30 +1,143 @@
 {% extends 'base.html' %}
 {% block title %} Posts {% endblock %}
 {% from "_render_field.html" import render_field %}
-
 {% block body %}
 <body>
     {% if list is defined and list|length > 0 %}
-    <table class="todo">
+    {% if current_user.id %}
+    <h1 class="create"><a class="btn btn-success" href={{url_for(".create")}}>Create New Post</a></h1>
+  {% endif %}
+    <table class="post">
          <tbody>
-             {% for i in list %}
+        
+            <tr>
+            <th colspan="4" class="head">
+                Category
+            </th>
+            </tr>
+           <tr>
+           
+            <th> <form class="login" action={{url_for(".view_all")}} method="POST" novalidate>
+                {{ all.csrf_token }}
+                {{ all.name.label }}
+                {{ all.name(class="form-control") }}
+                {{all.submit(class="btn btn-success")}}
+             
+            </form>
+            </th>
+            <th>
+                
+                <form class="login" action={{url_for(".add_category")}} method="POST" novalidate>
+                    {{ add_cat.csrf_token }}
+                    {{ add_cat.cat.label }}
+                    {{ add_cat.cat(class="form-control") }}
+                    {{add_cat.submit(class="btn btn-success")}}
+                </form>
+
+              </th>
+              <th>
+                <form class="login" action={{url_for(".upd_category")}} method="POST" novalidate>
+                    {{ upd_cat.csrf_token }}
+                    <p>{{ upd_cat.cat(class="form-control") }}
+                    </p>
+                  {{ upd_cat.new(class="form-control") }}
+                   
+                    {{upd_cat.submit(class="btn btn-success")}}
+                </form>
+              </th>
+              <th>
+                <form class="login" action={{url_for(".del_category")}} method="POST" novalidate>
+                    {{ del_cat.csrf_token }}
+                    {{ del_cat.cat.label }}
+                    {{ del_cat.cat(class="form-control") }}
+                    {{del_cat.submit(class="btn btn-danger")}}
+                </form>
+            </th>
+        </tr>
+        <tr class="head">
+            <th colspan="4" class="head">Posts
+            </th>
+            </tr>
+             {% for i in pagination.items %}
+           
              <tr>
-                 
-                 <th>
+               
+                 <td>
                     <a href={{url_for(".view_post", post_id = i.id)}}> {{i.title}}</a></td>
                    
-                </th>
+                </td>
                  <td>{{i.get_category().name}}</td>
-                 <td>{{i.type.name}}</td>
-                
+                 <td>{{i.type.name}}</td>     
                  <td>{{i.enabled}}</td>
                 </tr>
-             {% endfor %}
+              {% endfor %}
+            
+              {% if i is not defined %}
+              <tr>
+                <td colspan="4" class="head">
+              <p>No posts found</p>
+            </td>
+            </tr>
+              {% endif %}
+          
+            
          </tbody>
+        </div>
      </table>
-     <p2 >Amount of posts = {{list|length}}</p1>
+     
      {% else %}
      <p1 class="info">No posts found</p1>
      {% endif %}
+     <ul class="pagination justify-content-center">
+        {% if pagination.has_prev %}
+        <li class="page-item">
+            <span>
+                <a class="page-link" href="{{ url_for('.view_all', page=pagination.prev_num) }}">
+                    {{ '<<<' }}
+                </a>
+            </span>
+            </li>
+
+        {% endif %}
+    
+        {% for number in pagination.iter_pages(left_current=1, right_current=1,left_edge=1,right_edge=1) %}
+           
+            {% if pagination.page != number %}
+            {% if number == None %}
+            <span>
+                <li class="page-item">
+               <a class="page-link"
+                        href="{{ url_for('.view_all', page=pagination.page)}}">
+                    {{ "..." }}
+                    </a>
+
+                </li>
+            </span>
+            {% else %}
+                <span>
+                    <li class="page-item">
+                        <a class="page-link"
+                            href="{{ url_for('.view_all', page=number) }}">
+                        {{ number }}
+                        </a>
+                    </li>
+                </span>
+                {% endif %}
+            {% else %}
+            <li class="page-item active" aria-current="page">
+                <span class="page-link">{{ number }}</span>
+            </li>
+                {% endif %}
+        {% endfor %}
+    
+        {% if pagination.has_next %}
+        <li class="page-item">
+                <a class="page-link" 
+                    href="{{ url_for('.view_all', page=pagination.next_num) }}">
+                    {{ '>>>' }}
+                </a>
+        {% endif %}
+        </ul>
+
 </body>
 {% endblock %}

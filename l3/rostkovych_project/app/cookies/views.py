@@ -1,15 +1,7 @@
 from collections import defaultdict
 from flask import request, render_template,redirect ,url_for, make_response, session;
 from flask_login import current_user
-import json
-
 from . import cookies
-
-
-path_to_json = "app\static\data.json"
-with open(path_to_json, "r") as handler:
-    data = json.load(handler)
-
 
 
 @cookies.route('/info')
