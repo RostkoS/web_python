@@ -3,7 +3,6 @@
 {% from "_render_field.html" import render_field %}
 {% block body %}
 <body>
-    {% if list is defined and list|length > 0 %}
     {% if current_user.id %}
     <h1 class="create"><a class="btn btn-success" href={{url_for(".create")}}>Create New Post</a></h1>
   {% endif %}
@@ -57,6 +56,7 @@
         <tr class="head">
             <th colspan="4" class="head">Posts
             </th>
+          
             </tr>
              {% for i in pagination.items %}
            
@@ -71,23 +71,20 @@
                  <td>{{i.enabled}}</td>
                 </tr>
               {% endfor %}
-            
-              {% if i is not defined %}
+              {% if list is not defined or list|length <= 0 %}
               <tr>
                 <td colspan="4" class="head">
-              <p>No posts found</p>
+                <p>No posts found</p>
             </td>
             </tr>
-              {% endif %}
+              {% endif %}  
+             
           
             
          </tbody>
         </div>
      </table>
      
-     {% else %}
-     <p1 class="info">No posts found</p1>
-     {% endif %}
      <ul class="pagination justify-content-center">
         {% if pagination.has_prev %}
         <li class="page-item">

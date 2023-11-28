@@ -129,24 +129,16 @@ def update(id):
    return render_template("update.html", form=form,chosen = chosen, id=id)
 @posts.route('/posts/<int:id>/delete', methods=["GET","POST"])
 def delete(id):
-   form = ConfirmForm()
-   if form.validate_on_submit():
-      print(form.confirm.data)
-      if form.confirm.data=="Yes":
-          chosen = db.get_or_404(Posts, id)
-          ex = db.session.query(Tag_Post).filter_by(post_id=id).all()
-          for e in ex:
-               db.session.delete(e)
-          db.session.delete(chosen)
-          db.session.commit()
-          flash(f"Post deleted '{chosen.title}'", category="danger")
-          
-          return redirect(url_for(".view_all")) 
-      else:
-           flash("Deletion not confirmed")
-           return redirect(url_for(".view_post", post_id=id)) 
-   return render_template("confirm.html", form=form, id=id)
-
+   chosen = db.get_or_404(Posts, id)
+   ex = db.session.query(Tag_Post).filter_by(post_id=id).all()
+   for e in ex:
+        db.session.delete(e)
+   db.session.delete(chosen)
+   db.session.commit()
+   flash(f"Post deleted '{chosen.title}'", category="danger")
+         
+   return redirect(url_for(".view_all")) 
+ 
   
 @posts.route('/posts', methods=["GET","POST"])
 def view_all():
@@ -162,6 +154,7 @@ def view_all():
          category_name = all.name.data
          category = db.session.query(Category).filter_by(name=category_name).first()
          flash(f"Posts filtered", category="success")
+         list = Posts.query.filter_by(category_id=category.id).all()
          pagination = Posts.query.filter_by(category_id=category.id).paginate(per_page=2)
          
    

@@ -22,3 +22,7 @@ document.getElementById('hi').style.opacity = 0;
     }
 }
 
+let elem = document.getElementById('exampleModal')
+let modal = new Modal(elem)
+modal.show()
+
