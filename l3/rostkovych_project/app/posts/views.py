@@ -1,6 +1,6 @@
 from collections import defaultdict
 from flask import Blueprint,flash, request, render_template,redirect ,url_for, make_response, session;
-from .forms import UpdCategoryForm, AllCategoryForm, DelCategoryForm, ConfirmForm, CreatePostForm, UpdatePostForm, AddCategoryForm
+from .forms import AddTagForm,DelTagForm,UpdTagForm,UpdCategoryForm, AllCategoryForm, DelCategoryForm, ConfirmForm, CreatePostForm, UpdatePostForm, AddCategoryForm
 from datetime import datetime
 from .models import Posts, Category, Tag, Tag_Post
 from flask_login import current_user
@@ -159,4 +159,37 @@ def view_all():
          
    
    return render_template("posts.html", list=list, pagination=pagination, add_cat=add_cat,del_cat=del_cat,upd_cat=upd_cat, all=all)
+
+@posts.route('/tags', methods=["GET","POST"])
+
+def tags():
+   add_tag = AddTagForm()
+   del_tag = DelTagForm()
+   upd_tag = UpdTagForm() 
+   if add_tag.validate_on_submit():
+      new = Tag(name=add_tag.tag.data)
+      db.session.add(new)
+      print(new.id)
+      db.session.commit()
+      flash(f"Tag added", category="success")
+   elif upd_tag.validate_on_submit():
+      print(upd_tag.new.data)
+      chosen = Tag.query.filter_by(name=add_tag.tag.data).first()
+      chosen.name= upd_tag.new.data
+      flash(f"Tag '{chosen.name}'updated  ", category="success")
+      db.session.commit()
+   elif del_tag.validate_on_submit():
+      chosen = Tag.query.filter_by(name=add_tag.tag.data).first()
+      chosen = db.get_or_404(Tag,chosen.id)
+      flash(f"Tag '{chosen.name}' deleted  ", category="danger")
+   
+      db.session.delete(chosen)
+      db.session.commit()
+   
+   
+
+
+   list = Tag.query.all()
+   return render_template("tags.html", list=Tag.query.all(),add_tag=add_tag, upd_tag=UpdTagForm() , del_tag=DelTagForm())
+   
 

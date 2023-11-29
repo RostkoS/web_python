@@ -4,7 +4,10 @@
 {% block body %}
 <body>
     {% if current_user.id %}
-    <h1 class="create"><a class="btn btn-success" href={{url_for(".create")}}>Create New Post</a></h1>
+    <h1 class="create"><a class="btn btn-success" href={{url_for(".create")}}>Create New Post</a>
+     <a class="btn btn-success" href={{url_for(".tags")}}>Add tag</a>
+  
+    </h1>
   {% endif %}
     <table class="post">
          <tbody>

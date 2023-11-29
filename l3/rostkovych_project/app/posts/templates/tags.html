@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %} New Post {% endblock %}
+{% from "_render_field.html" import render_field %}
+
+{% block body %}
+<body>
+    <h1 class="create"><a class="btn btn-success" href={{url_for(".view_all")}}>View Posts</a></h1>
+   
+    <div class="container">
+        <div class="todo">
+          
+
+                    {% for i in list %}
+                    <p class="badge rounded-pill bg-success">{{i.name}}</p>
+      
+                    {% endfor %}
+
+        
+            <form class="login" action={{url_for(".tags")}} method="POST" novalidate>
+                {{ add_tag.csrf_token }}
+                {{ add_tag.non_field_errors }}
+                {{ add_tag.tag.label }}
+                {{ add_tag.tag(class="form-control") }}
+                {{add_tag.submit(class="btn btn-success")}}
+            </form>
+
+            <form class="login" action={{url_for(".tags")}} method="POST" novalidate>
+                {{ upd_tag.csrf_token }}
+                {{ render_field(upd_tag.tag, class="form-control" )}}
+
+                {{ render_field(upd_tag.new, class="form-control" )}}
+
+      
+                {{upd_tag.submit(class="btn btn-success")}}
+            </form>
+
+            <form class="login" action={{url_for(".tags")}} method="POST" novalidate>
+                {{ del_tag.csrf_token }}
+                {{ render_field(del_tag.tag, class="form-control" )}}
+
+                {{del_tag.submit(class="btn btn-danger")}}
+            </form>
+</div>
+</div>
+
+</body>
+{% endblock %}
