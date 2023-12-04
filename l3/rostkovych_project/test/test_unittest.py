@@ -3,12 +3,14 @@ from app import create_app, db
 from flask_testing import TestCase
 from app.auth.models import User
 from flask_login import current_user, login_user
+from app.todo.templates.models import Tasks
 
 class Test_Unittest(TestCase):
    def setUp(self): 
       db.create_all() 
       user = User(username='user', email='user@gmail.com', password='password') 
-      db.session.add_all([user]) 
+      t = Tasks(title='title', description='Test description') 
+      db.session.add_all([user, t]) 
       db.session.commit()
    def tearDown(self):
         db.session.remove()
@@ -90,3 +92,38 @@ class Test_Unittest(TestCase):
      self.assertTrue(user.username=="test")
      self.assertTrue(user.email=="test@test.com")
      self.assertTrue(user.about=="!!!!")
+
+   def test_todo_page_loads(self): 
+     """Test Tasks view test"""
+     with self.client: response = self.client.get('/tasks') 
+     self.assertEqual(response.status_code, 200)
+     self.assertIn(b'Actions', response.data)
+
+   def test_todo_new(self): 
+     """Test creating new task"""
+     with self.client: 
+        response = self.client.post('/tasks', data=dict(text="test",description="new" ), follow_redirects=True) 
+     self.assertEqual(response.status_code, 200)
+     t1 = Tasks.query.filter_by(title="test").first()
+     self.assertTrue(t1.description=="new")
+
+   def test_todo_update(self): 
+     """Test updating status of a task"""
+     with self.client: 
+        response = self.client.get('/tasks/update/1', follow_redirects=True) 
+     t1 = Tasks.query.filter_by(id=1).first()
+     print(t1.complete)
+     self.assertEqual(response.status_code, 200)
+     self.assertTrue(t1.complete==True)
+     with self.client: 
+        response = self.client.get('/tasks/update/1', follow_redirects=True) 
+     self.assertEqual(response.status_code, 200)
+     self.assertTrue(t1.complete==False)
+
+   def test_todo_delete(self): 
+     """Test deleting a task"""
+     with self.client: 
+        response = self.client.get('/tasks/delete/1', follow_redirects=True) 
+     t1 = Tasks.query.filter_by(id=1).first()
+     self.assertEqual(response.status_code, 200)
+     self.assertEqual(t1,None)
