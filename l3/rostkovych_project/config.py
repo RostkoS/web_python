@@ -17,6 +17,13 @@ class DevConfig(Config):
     SQLALCHEMY_TRACK_MODIFICATIONS=False
     UPLOAD_FOLDER = "static\profile_img"
     MAX_CONTENT_PATH = 622080
+class TestConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///test.sqlite'
+    SQLALCHEMY_TRACK_MODIFICATIONS=False
+    UPLOAD_FOLDER = "static\profile_img"
+    MAX_CONTENT_PATH = 622080
 
 class ProdConfig(Config):
     DEVELOPMENT = True
@@ -28,4 +35,5 @@ config = {
     'dev': DevConfig,
     'prod': ProdConfig,
     'default': DevConfig,
+    'test': TestConfig
 }

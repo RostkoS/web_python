@@ -29,9 +29,10 @@ def create_app(config_name="dev"):
     migrate = Migrate(app,db,render_as_batch=True)
     app.config['database'] = db
     
-    login_manager.login_view = 'login'
+    login_manager.login_view = 'auth.login'
     login_manager.login_message_category='info'
     login_manager.init_app(app)
+    app.app_context().push()
     from app.auth.view import auth
     from app.todo.templates.views import todo
     from app.cookies.views import cookies
