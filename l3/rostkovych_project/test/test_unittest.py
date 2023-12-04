@@ -1,11 +1,21 @@
 import unittest
-from app import create_app
+from app import create_app, db
 from flask_testing import TestCase
-
+from app.auth.models import User
+from flask_login import current_user, login_user
 
 class Test_Unittest(TestCase):
+   def setUp(self): 
+      db.create_all() 
+      user = User(username='user', email='user@gmail.com', password='password') 
+      db.session.add_all([user]) 
+      db.session.commit()
+   def tearDown(self):
+        db.session.remove()
+        db.drop_all()
    def create_app(self):
      app = create_app('test')
+     app.config['WTF_CSRF_ENABLED'] = False
      return app
 
    def test_setup(self): 
@@ -32,4 +42,51 @@ class Test_Unittest(TestCase):
      with self.client: response = self.client.get('/education') 
      self.assertEqual(response.status_code, 200)
      self.assertIn(b'Vasyl Stefanyk', response.data)
-   
+   def test_login_page_loads(self): 
+     """Test LoginPage view test"""
+     with self.client: response = self.client.get('/login') 
+     self.assertEqual(response.status_code, 200)
+     self.assertIn(b'remember', response.data)
+   def test_register_page_loads(self): 
+     """Test RegisterPage view test"""
+     with self.client: response = self.client.get('/register') 
+     self.assertEqual(response.status_code, 200)
+     self.assertIn(b'confirm_password', response.data)
+   def test_login(self):
+        """Test logging in registered user"""
+        with self.client:
+            response = self.client.post(
+                '/login',
+                data=dict(name="user", password="password", remember=True),
+                follow_redirects=True
+            )
+            assert response.status_code == 200
+            assert response.request.path == '/account'
+            self.assertIn(b'About Me', response.data)
+            self.assertTrue(current_user.username == "user")
+            self.assertTrue(current_user.is_active())
+   def test_logout(self):
+        """Test logging out """
+        with self.client:
+            response = self.client.post('/logout',   follow_redirects=True)
+            assert response.status_code == 200
+            assert response.request.path == '/login'
+            self.assertIn(b'Log In', response.data)
+            self.assertFalse(current_user.is_authenticated)
+
+   def test_register(self): 
+     """Test registering new user"""
+     with self.client: 
+      response = self.client.post( '/register', data=dict(name='test', email='test@test.com', password='password', confirm_password='password'), follow_redirects=True ) 
+     user = User.query.filter_by(email='test@test.com').first() 
+     self.assertIsNotNone(user)
+
+   def test_account(self): 
+     """Test updating the account info"""
+     user = User.query.filter_by(email='user@gmail.com').first() 
+     login_user(user)     
+     with self.client: 
+      response = self.client.post( '/account', data=dict(new_name='test', new_email='test@test.com', about='!!!!'), follow_redirects=True ) 
+     self.assertTrue(user.username=="test")
+     self.assertTrue(user.email=="test@test.com")
+     self.assertTrue(user.about=="!!!!")
