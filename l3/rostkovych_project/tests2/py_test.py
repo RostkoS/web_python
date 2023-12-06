@@ -42,3 +42,36 @@ def test_create_post(client):
     assert 'news' in t.category.name
     assert 'testing post' in t.text
 
+def test_update_post(client):
+  with client:
+    client.post(
+                '/login',
+                data=dict(name="user", password="password", remember=True),
+                follow_redirects=True
+            )
+    response = client.post(
+        'posts/1/update', 
+        data=dict(title='test1',text='testing update', type='long', category='book'), 
+        follow_redirects=True ) 
+    assert response.status_code == 200
+    assert b'test1'in response.data
+    t = Posts.query.filter_by(title='test1').first() 
+    assert t is not None
+    assert 'long' in t.type.name
+    assert 'book' in t.category.name
+    assert 'testing update' in t.text
+
+def test_delete_post(client):
+  with client:
+    client.post(
+                '/login',
+                data=dict(name="user", password="password", remember=True),
+                follow_redirects=True
+            )
+    response = client.post(
+        'posts/1/delete', 
+        follow_redirects=True ) 
+    assert response.status_code == 200
+    assert b'Posts'in response.data
+    t = Posts.query.filter_by(id=1).first() 
+    assert t is None
