@@ -20,9 +20,10 @@ class DevConfig(Config):
 class TestConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
+    WTF_CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:///test.sqlite'
     SQLALCHEMY_TRACK_MODIFICATIONS=False
-    UPLOAD_FOLDER = "static\profile_img"
+    UPLOAD_FOLDER = "app\posts\static\post_img"
     MAX_CONTENT_PATH = 622080
 
 class ProdConfig(Config):

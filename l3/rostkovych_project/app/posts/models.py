@@ -52,10 +52,6 @@ class Posts(db.Model):
     
     def get_category(self):
         return db.session.query(Category).filter_by(id=self.category_id).first()
- 
-    def __repr__(self):
-        return f"User('{self.title}', '{self.text}', '{self.image_file}','{self.created}, '{self.type}'')"
-
 
 class Tag_Post(db.Model):
     __tablename__ = 'tag_post'

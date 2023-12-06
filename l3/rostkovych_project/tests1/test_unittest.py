@@ -98,6 +98,7 @@ class Test_Unittest(TestCase):
      with self.client: response = self.client.get('/tasks') 
      self.assertEqual(response.status_code, 200)
      self.assertIn(b'Actions', response.data)
+     self.assertIn(b'Test description', response.data)
 
    def test_todo_new(self): 
      """Test creating new task"""
