@@ -186,9 +186,6 @@ def tags():
       db.session.delete(chosen)
       db.session.commit()
    
-   
-
-
    list = Tag.query.all()
    return render_template("tags.html", list=Tag.query.all(),add_tag=add_tag, upd_tag=UpdTagForm() , del_tag=DelTagForm())
    
