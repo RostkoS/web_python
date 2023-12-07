@@ -39,7 +39,7 @@ def create_app(config_name="dev"):
     from app.main.views import main
     from app.sam.views import sam
     from app.posts.views import posts
-
+    from app.api.views import api_bp
     with app.app_context():
         app.register_blueprint(auth, url_prefix="/")
         app.register_blueprint(todo, url_prefix='/')
@@ -47,5 +47,6 @@ def create_app(config_name="dev"):
         app.register_blueprint(sam, url_prefix="/")
         app.register_blueprint(cookies, url_prefix="/")
         app.register_blueprint(posts, url_prefix="/")
+        app.register_blueprint(api_bp)
     return app
 
