@@ -2,8 +2,54 @@ from . import api_bp
 from flask import request
 from flask import jsonify
 from app.todo.templates.models import Tasks
+from app.auth.models import User
 from app import db
 from sqlalchemy.exc import IntegrityError
+from flask_httpauth import HTTPBasicAuth
+import datetime, app, jwt
+from flask_jwt_extended import jwt_required
+from functools import wraps
+auth = HTTPBasicAuth()
+app.config['SECRET_KEY'] = 'secret_key'
+
+def generate_token(name):
+    payload = {
+        'exp': datetime.datetime.utcnow()+datetime.timedelta(hours=1),
+        'iat':  datetime.datetime.utcnow(),
+        'sub': name
+    }
+    token = jwt.encode(payload,
+    app.config['SECRET_KEY'], algorithm='HS256')
+    return token
+
+@api_bp.route('/ba', methods=['POST'])
+def login():
+    auth = request.json
+    if auth and  User.query.filter_by(username=auth['username']).first() != None and User.query.filter_by(username=auth['username']).first().verify_password(auth['password']):
+        token = generate_token(auth['username'])
+        return jsonify({'token':token}), 200
+    else: 
+        return jsonify({'message':'Not logged in'}),401
+
+def token_required(f):
+    @wraps(f)
+   
+    def decorated(*args, **kwargs):
+        token = None
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        
+        if not token:
+            return jsonify({'message':'Token is missing'}),401
+        try:
+            data = jwt.decode(token,app.config['SECRET_KEY'], algorithms=['HS256'])   
+            current_user = User.query.filter_by(username=data['sub']).first()
+        except: 
+            return jsonify({'message':'Token is invalid'}),401
+        return f(current_user, *args, **kwargs)
+    return decorated
+       
+
 
 @api_bp.route('/ping', methods=['GET'])
 def api_ping():
@@ -28,7 +74,8 @@ def get_tasks():
     return jsonify(todo_dict)
   
 @api_bp.route('/tasks', methods=['POST'])
-def post_tasks():
+@token_required
+def post_tasks(current_user):
     new = request.get_json()
     if not new:
         return jsonify({"message":"No input"}),400
@@ -60,7 +107,8 @@ def get_task(id):
          }),200
 
 @api_bp.route('/tasks/<int:id>', methods=['PUT'])
-def put_task(id):
+@token_required
+def put_task(current_user, id):
     todo = Tasks.query.filter_by(id=id).first()
     if not todo :
         return  jsonify({
@@ -81,15 +129,17 @@ def put_task(id):
     
     
     return jsonify({
-        "message":"Task updated",
+    "message":"Task updated",
      "id": todo.id,
      "title": todo.title,
      "description": todo.description
-         }),204
+         }),200
+         
 
 @api_bp.route('/tasks/<int:id>', methods=['DELETE'])
-def delete_task(id):
+@token_required
+def delete_task(current_user, id):
       t = Tasks.query.get(id)
       db.session.delete(t)
       db.session.commit()
-      return jsonify({"message" : f"The Task{id} has been deleted!"}), 204
+      return jsonify({"message" : f"The Task #{id} has been deleted!"}), 200
