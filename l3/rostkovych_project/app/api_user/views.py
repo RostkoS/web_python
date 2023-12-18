@@ -10,7 +10,7 @@ user_schema = UserSchema()
 class Hello(Resource):
     def get(self):
         return {'message':'Hello'}
-class UserApi(Resource):
+class UsersApi(Resource):
     def get(self):
         users = User.query.all()
         print(users)
@@ -42,6 +42,47 @@ class UserApi(Resource):
           "id": new_user.id,
           "username": new_user.username},201
    
+class UserApi(Resource):
+     def put(self, id):
+        json_data = request.get_json(force=True)
 
-api.add_resource(UserApi,'/users')
+        if not json_data:
+               return {'message': 'No input data provided'}, 400
+
+        user = User.query.get(id)
+        if user is None:
+           return {'message':'user does not exists'},400
+        try:
+            data = user_schema.load(json_data)
+        except ValidationError as err:
+            return err.messages, 422
+        
+        image_file = data.get("image_file")
+        if image_file is None:
+            image_file = "default.jpg"
+        username = data.get("username")
+       
+        if username is None:
+            username = user.username
+        print(username)
+        email=data.get("email")
+        if email is None:
+             email = user.email
+        password=data.get("password")
+        if password is None:
+           password = user.password
+        user.username = username
+        user.email=email
+        user.password=password
+        user.image_file=image_file
+        try:
+           db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+        result = user_schema.dump(user)
+        return {
+          "message":"User was updated",
+          "user": result },200
+api.add_resource(UsersApi,'/users')
+api.add_resource(UserApi,'/user/<int:id>')
 api.add_resource(Hello, "/Hello")
