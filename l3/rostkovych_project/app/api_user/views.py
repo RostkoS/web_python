@@ -36,14 +36,22 @@ class UsersApi(Resource):
         db.session.add(new)
         db.session.commit()
         new_user = User.query.filter_by(id=new.id).first()
-        result = user_schema.dump(new_user).data
+        result = user_schema.dump(new_user)
         return {
           "message":"User was created",
           "id": new_user.id,
           "username": new_user.username},201
    
 class UserApi(Resource):
-     def put(self, id):
+    def get(self,id):
+        user = User.query.get(id)
+        if user is None:
+           return {'message':'user does not exists'},400
+        
+        user = user_schema.dump(user)
+        return {'message':'success', 'data': user},200
+
+    def put(self, id):
         json_data = request.get_json(force=True)
 
         if not json_data:
@@ -83,6 +91,22 @@ class UserApi(Resource):
         return {
           "message":"User was updated",
           "user": result },200
+
+    def delete(self, id):
+        
+        user = User.query.get(id)
+        if user is None:
+           return {'message':'user does not exists'},400
+        
+        db.session.delete(user)
+        
+        try:
+           db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+        result = user_schema.dump(user)
+        return {
+          "message":"User was deleted"},200
 api.add_resource(UsersApi,'/users')
 api.add_resource(UserApi,'/user/<int:id>')
 api.add_resource(Hello, "/Hello")
