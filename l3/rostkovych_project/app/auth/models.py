@@ -3,6 +3,7 @@ from app import login_manager
 from flask_login import UserMixin
 from app import bcrypt, db
 from app.posts.models import Posts
+from marshmallow import Schema, fields, validate
 
 @login_manager.user_loader
 def user_loader(id):
@@ -38,3 +39,11 @@ class User(db.Model):
         return False
     def get_id(self):
         return self.id
+
+class UserSchema(Schema):
+    username = fields.Str(required=True, validate=validate.Length(min=4, max=10))
+    email = fields.Email(required=True)
+    image_file =  fields.Str()
+    password = fields.Str(required=True, validate=validate.Length(min=6))
+    #about = fields.Str()
+  

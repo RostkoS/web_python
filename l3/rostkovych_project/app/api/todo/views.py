@@ -33,7 +33,6 @@ def login():
 
 def token_required(f):
     @wraps(f)
-   
     def decorated(*args, **kwargs):
         token = None
         if 'x-access-token' in request.headers:
@@ -140,6 +139,9 @@ def put_task(current_user, id):
 @token_required
 def delete_task(current_user, id):
       t = Tasks.query.get(id)
-      db.session.delete(t)
-      db.session.commit()
-      return jsonify({"message" : f"The Task #{id} has been deleted!"}), 200
+      if t!=None:
+        db.session.delete(t)
+        db.session.commit()
+        return jsonify({"message" : f"The Task #{id} has been deleted!"}), 200
+      else:
+        return jsonify({"message" : f"The Task #{id} does not exist!"}), 404
