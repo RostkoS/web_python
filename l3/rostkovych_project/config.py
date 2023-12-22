@@ -13,7 +13,7 @@ class Config(object):
 class DevConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///flaskdb.sqlite'
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS=False
     UPLOAD_FOLDER = "static\profile_img"
     MAX_CONTENT_PATH = 622080
@@ -29,7 +29,7 @@ class TestConfig(Config):
 class ProdConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///flaskdb.sqlite'
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
   
     
 config = {

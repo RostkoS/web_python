@@ -1,0 +1,9 @@
+/__pycache__
+/.pytest_cache
+instance/
+migrations/
+/tests1
+/tests2
+/instance
+.myenv/
+/htmlcov
