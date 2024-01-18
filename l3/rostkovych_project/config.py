@@ -13,7 +13,7 @@ class Config(object):
 class DevConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    SQLALCHEMY_DATABASE_URI = "postgresql://py_web_db_user:1zTJghfaiRSb1NJnIFEZcVEsYQwWFZEO@dpg-cm2p1ji1hbls73frf180-a.oregon-postgres.render.com/py_web_db"
     SQLALCHEMY_TRACK_MODIFICATIONS=False
     UPLOAD_FOLDER = "static\profile_img"
     MAX_CONTENT_PATH = 622080
@@ -29,7 +29,7 @@ class TestConfig(Config):
 class ProdConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    SQLALCHEMY_DATABASE_URI = "postgresql://py_web_db_user:1zTJghfaiRSb1NJnIFEZcVEsYQwWFZEO@dpg-cm2p1ji1hbls73frf180-a.oregon-postgres.render.com/py_web_db"
   
     
 config = {
