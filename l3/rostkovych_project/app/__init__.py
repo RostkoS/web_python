@@ -26,6 +26,7 @@ def create_app(config_name="dev"):
     # Initialise extensions
     
     db.init_app(app)
+
     migrate = Migrate(app,db,render_as_batch=True)
     app.config['database'] = db
     
@@ -43,6 +44,7 @@ def create_app(config_name="dev"):
     from app.api_user.views import restful_api_bp
     from app.swagger_ui.views import swagger_ui_blueprint
     with app.app_context():
+        db.create_all()
         app.register_blueprint(auth, url_prefix="/")
         app.register_blueprint(todo, url_prefix='/')
         app.register_blueprint(main, url_prefix="/")
